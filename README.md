@@ -16,12 +16,12 @@ roles and approve or remove courses created by instructors.</p>
 <h1>Instructor Module</h1>
 <p>Instructors can create and manage courses. They can add lessons to each course
 and see which students have enrolled.</p>
-Student Module
-Students can browse available courses,enroll in them, and view lessons. They can
-also track their learning progress.
-Course and Lesson Management
-Courses include titles and descriptions. Each course has multiple lessons, which
-can contain text, videos, or PDFs.
-Enrollment Module
-Students enroll in courses. Once enrolled, they get access to the course materials.
-Duplicate enrollments are not allowed.
+<h1>Student Module</h1>
+<p>Students can browse available courses,enroll in them, and view lessons. They can
+also track their learning progress.</p>
+<h1>Course and Lesson Management</h1>
+<p>Courses include titles and descriptions. Each course has multiple lessons, which
+can contain text, videos, or PDFs.</p>
+<h1>Enrollment Module</h1>
+<p>Students enroll in courses. Once enrolled, they get access to the course materials.
+Duplicate enrollments are not allowed.</p>
