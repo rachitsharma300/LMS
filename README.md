@@ -25,3 +25,32 @@ can contain text, videos, or PDFs.</p>
 <h1>Enrollment Module</h1>
 <p>Students enroll in courses. Once enrolled, they get access to the course materials.
 Duplicate enrollments are not allowed.</p>
+
+<br>
+
+Media Upload Module
+The Media Upload Module allows instructors (or admins) to upload course-related
+files such as videos, PDFs, images, or audio. These media files are essential for
+creating rich lessons and enhancing the learning experience.
+Tech Stack:
+Frontend: React.js or Thymeleaf with Tailwind CSS
+Backend: Spring Boot 3, Spring Security, JWT, Spring Data JPA
+Database: MySQL/MongoDB
+Testing: JUnit 5, Mockito
+AWS $3/Uploadcare /Firebase Storage-for storing media like pdf, video, audio etc.
+OpenAPI/Swagger - for endpoints documentation
+Deployment: Render/Railway/Netlify
+Testing:
+Write JUnit 5 and Mockito unit tests for backend services.(Controller, Service,
+Repository)
+Perform end-to-end testing for user workflows.
+How do I submit my work?
+For Code Submission:
+Code:
+Push your complete project code to GitHub
+• Organize your code into /backend and /frontend folders (if using React).
+Deployment:
+Option 1: Deploy Backend on Render/Railway/AWS EC2(Mandatory)
+Option 2: Frontend on Vercel/Netlify(Mandatory)
+Option 3: Record a 1-2 min walkthrough video and upload to Google Drive
+(public access)(Optional)
