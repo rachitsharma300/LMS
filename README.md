@@ -33,13 +33,14 @@ Duplicate enrollments are not allowed.</p>
 ### files such as videos, PDFs, images, or audio. These media files are essential for
 ### creating rich lessons and enhancing the learning experience.
 # Tech Stack:
-Frontend: React.js or Thymeleaf with Tailwind CSS
+<p>Frontend: React.js or Thymeleaf with Tailwind CSS
 Backend: Spring Boot 3, Spring Security, JWT, Spring Data JPA
 Database: MySQL/MongoDB
 Testing: JUnit 5, Mockito
 AWS $3/Uploadcare /Firebase Storage-for storing media like pdf, video, audio etc.
 OpenAPI/Swagger - for endpoints documentation
 Deployment: Render/Railway/Netlify
+</p>
 Testing:
 Write JUnit 5 and Mockito unit tests for backend services.(Controller, Service,
 Repository)
