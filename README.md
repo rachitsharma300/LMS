@@ -28,10 +28,10 @@ Duplicate enrollments are not allowed.</p>
 
 <br>
 
-Media Upload Module
-The Media Upload Module allows instructors (or admins) to upload course-related
-files such as videos, PDFs, images, or audio. These media files are essential for
-creating rich lessons and enhancing the learning experience.
+## Media Upload Module
+# The Media Upload Module allows instructors (or admins) to upload course-related
+# files such as videos, PDFs, images, or audio. These media files are essential for
+# creating rich lessons and enhancing the learning experience.
 Tech Stack:
 Frontend: React.js or Thymeleaf with Tailwind CSS
 Backend: Spring Boot 3, Spring Security, JWT, Spring Data JPA
