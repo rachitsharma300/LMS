@@ -50,7 +50,7 @@ For Code Submission:
 Code:
 Push your complete project code to GitHub
 <h1>• Organize your code into /backend and /frontend folders (if using React).</h1>
-Deployment:
+# Deployment:
 Option 1: Deploy Backend on Render/Railway/AWS EC2(Mandatory)
 Option 2: Frontend on Vercel/Netlify(Mandatory)
 Option 3: Record a 1-2 min walkthrough video and upload to Google Drive
