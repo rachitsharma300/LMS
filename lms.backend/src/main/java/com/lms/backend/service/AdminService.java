@@ -1,4 +1,13 @@
 package com.lms.backend.service;
 
-public class AdminService {
+import com.lms.backend.model.User;
+import java.util.List;
+
+public interface AdminService {
+
+    List<User> getAllUsers();
+
+    void deleteUser(Long userId);
+
+    User updateUserRole(Long userId, String role);
 }
