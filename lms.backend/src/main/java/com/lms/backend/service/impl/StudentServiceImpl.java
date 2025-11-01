@@ -15,21 +15,25 @@ import java.util.List;
 public class StudentServiceImpl implements StudentService {
 
     @Autowired
-    private EnrollmentRepository enrollmentRepository;
-
-    @Autowired
     private CourseRepository courseRepository;
 
+    @Autowired
+    private EnrollmentRepository enrollmentRepository;
+
     @Override
-    public Enrollment enrollInCourse(User student, Course course) {
-        if (enrollmentRepository.existsByStudentAndCourse(student, course)) {
-            throw new RuntimeException("Already enrolled!");
+    public void enrollCourse(User student, Long courseId) {
+        Course course = courseRepository.findById(courseId)
+                .orElseThrow(() -> new RuntimeException("Course not found"));
+
+        boolean alreadyEnrolled = enrollmentRepository.existsByStudentAndCourse(student, course);
+        if (alreadyEnrolled) {
+            throw new RuntimeException("Already enrolled in this course");
         }
 
         Enrollment enrollment = new Enrollment();
         enrollment.setStudent(student);
         enrollment.setCourse(course);
-        return enrollmentRepository.save(enrollment);
+        enrollmentRepository.save(enrollment);
     }
 
     @Override
