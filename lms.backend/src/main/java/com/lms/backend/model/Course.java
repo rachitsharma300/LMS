@@ -2,18 +2,16 @@ package com.lms.backend.model;
 
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
-import jakarta.validation.constraints.NotBlank;
 import lombok.*;
 
 import java.time.LocalDateTime;
-import java.util.ArrayList;
 import java.util.List;
 
 @Entity
 @Table(name = "courses")
 @Data
-@NoArgsConstructor
 @AllArgsConstructor
+@NoArgsConstructor
 @Builder
 public class Course {
 
@@ -21,38 +19,30 @@ public class Course {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @NotBlank
     @Column(nullable = false)
     private String title;
 
     @Column(length = 2000)
     private String description;
 
-    // optional cover image or thumbnail url
     private String coverImageUrl;
-
-    // is course approved by admin?
     private boolean approved = false;
 
-    // Course owner (instructor)
-    @ManyToOne(fetch = FetchType.LAZY)
+    private LocalDateTime createdAt;
+    private LocalDateTime updatedAt;
+
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "instructor_id")
     private User instructor;
 
-    // lessons in this course
     @OneToMany(mappedBy = "course", cascade = CascadeType.ALL, orphanRemoval = true)
-    @OrderBy("position ASC")
     @JsonManagedReference
-    @Builder.Default
-    private List<Lesson> lessons = new ArrayList<>();
-
-    private LocalDateTime createdAt = LocalDateTime.now();
-    private LocalDateTime updatedAt = LocalDateTime.now();
+    private List<Lesson> lessons;
 
     @PrePersist
     protected void onCreate() {
         createdAt = LocalDateTime.now();
-        updatedAt = createdAt;
+        updatedAt = LocalDateTime.now();
     }
 
     @PreUpdate
