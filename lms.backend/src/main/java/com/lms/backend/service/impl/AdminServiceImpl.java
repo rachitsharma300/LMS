@@ -1,9 +1,8 @@
 package com.lms.backend.service.impl;
 
-import com.lms.backend.model.Role;
 import com.lms.backend.model.User;
-import com.lms.backend.repository.RoleRepository;
 import com.lms.backend.repository.UserRepository;
+import com.lms.backend.repository.RoleRepository;
 import com.lms.backend.service.AdminService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -13,14 +12,11 @@ import java.util.List;
 @Service
 public class AdminServiceImpl implements AdminService {
 
-    private final UserRepository userRepository;
-    private final RoleRepository roleRepository;
+    @Autowired
+    private UserRepository userRepository;
 
     @Autowired
-    public AdminServiceImpl(UserRepository userRepository, RoleRepository roleRepository) {
-        this.userRepository = userRepository;
-        this.roleRepository = roleRepository;
-    }
+    private RoleRepository roleRepository;
 
     @Override
     public List<User> getAllUsers() {
@@ -29,6 +25,9 @@ public class AdminServiceImpl implements AdminService {
 
     @Override
     public void deleteUser(Long userId) {
+        if (!userRepository.existsById(userId)) {
+            throw new RuntimeException("User not found");
+        }
         userRepository.deleteById(userId);
     }
 
@@ -37,10 +36,9 @@ public class AdminServiceImpl implements AdminService {
         User user = userRepository.findById(userId)
                 .orElseThrow(() -> new RuntimeException("User not found"));
 
-        Role role = roleRepository.findByName(Role.RoleName.valueOf(roleName.toUpperCase()))
-                .orElseThrow(() -> new RuntimeException("Invalid role name: " + roleName));
+        user.setRole(roleRepository.findByName(roleName)
+                .orElseThrow(() -> new RuntimeException("Role not found")));
 
-        user.setRole(role);
         return userRepository.save(user);
     }
 }
