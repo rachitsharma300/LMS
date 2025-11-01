@@ -32,8 +32,9 @@ public class AuthServiceImpl implements AuthService {
             throw new RuntimeException("Email already exists!");
         }
 
-        Role role = roleRepository.findByName(Role.RoleName.valueOf(
-                        signupRequest.getRole() != null ? signupRequest.getRole().toUpperCase() : "USER"))
+        String roleName = signupRequest.getRole() != null ? signupRequest.getRole().toUpperCase() : "ROLE_USER";
+
+        Role role = roleRepository.findByName(Role.RoleName.valueOf(roleName))
                 .orElseThrow(() -> new RuntimeException("Invalid role"));
 
         User user = User.builder()
@@ -44,5 +45,11 @@ public class AuthServiceImpl implements AuthService {
                 .build();
 
         return userRepository.save(user);
+    }
+
+    @Override
+    public User getCurrentUser() {
+        // 🔹 Dummy placeholder until JWT/SecurityContext added
+        return userRepository.findAll().stream().findFirst().orElse(null);
     }
 }
