@@ -20,20 +20,13 @@ public class Lesson {
     @NotBlank
     private String title;
 
-    // text content (short/long)
     @Column(columnDefinition = "TEXT")
     private String content;
 
-    // optional media (video/pdf/image) stored externally (S3/Uploadcare) - store URL
     private String mediaUrl;
-
-    // position/order within course lessons
     private Integer position = 0;
-
-    // duration in seconds (if video)
     private Integer durationSeconds;
 
-    // the parent course
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "course_id")
     @JsonBackReference
