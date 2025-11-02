@@ -21,27 +21,25 @@ public class CourseController {
     private CourseService courseService;
 
     @Autowired
-    private UserService userService; // ✅ for instructor lookup
+    private UserService userService;
 
     @GetMapping
     public List<CourseDto> getAllCourses() {
         return courseService.getAllCourses()
                 .stream()
-                .map(CourseMapper::toDto)  // ✅ static reference fix
+                .map(CourseMapper::toDto)
                 .collect(Collectors.toList());
     }
 
     @GetMapping("/{id}")
     public CourseDto getCourseById(@PathVariable Long id) {
         Course course = courseService.getCourseById(id);
-        return CourseMapper.toDto(course); // ✅ static call
+        return CourseMapper.toDto(course);
     }
 
     @PostMapping
     public CourseDto createCourse(@RequestBody CourseDto courseDto) {
-        // ✅ Fetch instructor (User object) using instructorId
         User instructor = userService.getUserById(courseDto.getInstructorId());
-
         Course course = CourseMapper.toEntity(courseDto, instructor);
         Course saved = courseService.createCourse(course);
         return CourseMapper.toDto(saved);
@@ -50,7 +48,6 @@ public class CourseController {
     @PutMapping("/{id}")
     public CourseDto updateCourse(@PathVariable Long id, @RequestBody CourseDto courseDto) {
         User instructor = userService.getUserById(courseDto.getInstructorId());
-
         Course course = CourseMapper.toEntity(courseDto, instructor);
         Course updated = courseService.updateCourse(id, course);
         return CourseMapper.toDto(updated);
