@@ -7,6 +7,8 @@ import com.lms.backend.repository.RoleRepository;
 import com.lms.backend.repository.UserRepository;
 import com.lms.backend.service.AuthService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -32,9 +34,15 @@ public class AuthServiceImpl implements AuthService {
             throw new RuntimeException("Email already exists!");
         }
 
-        String roleName = signupRequest.getRole() != null ? signupRequest.getRole().toUpperCase() : "ROLE_USER";
+        String r = signupRequest.getRole() != null ? signupRequest.getRole().toUpperCase() : "ROLE_STUDENT";
+        Role.RoleName roleEnum;
+        try {
+            roleEnum = Role.RoleName.valueOf(r);
+        } catch (IllegalArgumentException e) {
+            roleEnum = Role.RoleName.ROLE_STUDENT;
+        }
 
-        Role role = roleRepository.findByName(Role.RoleName.valueOf(roleName))
+        Role role = roleRepository.findByName(roleEnum)
                 .orElseThrow(() -> new RuntimeException("Invalid role"));
 
         User user = User.builder()
@@ -49,7 +57,11 @@ public class AuthServiceImpl implements AuthService {
 
     @Override
     public User getCurrentUser() {
-        // 🔹 Dummy placeholder until JWT/SecurityContext added
-        return userRepository.findAll().stream().findFirst().orElse(null);
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        if (auth == null || !auth.isAuthenticated() || "anonymousUser".equals(auth.getPrincipal())) {
+            return null;
+        }
+        String email = auth.getName(); // CustomUserDetailsService uses email as username
+        return userRepository.findByEmail(email).orElse(null);
     }
 }
