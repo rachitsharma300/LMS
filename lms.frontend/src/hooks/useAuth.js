@@ -1,8 +1,19 @@
-// src/hooks/useAuth.js
-import { useContext } from "react";
-import { AuthContext } from "../context/AuthContext";
+import { login as loginService, logout as logoutService } from "../services/authService";
 
-// Simple custom hook to use AuthContext easily
 export default function useAuth() {
-  return useContext(AuthContext);
+  const login = async (credentials) => {
+    const token = await loginService(credentials);
+    if (token) {
+      return token; // success
+    } else {
+      throw new Error("Login failed");
+    }
+  };
+
+  const logout = () => {
+    logoutService();
+    window.location.href = "/login";
+  };
+
+  return { login, logout };
 }

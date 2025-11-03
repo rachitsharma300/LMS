@@ -1,7 +1,8 @@
 // src/context/AuthContext.jsx
 import React, { createContext, useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import jwtDecode from "jwt-decode";
+// import jwtDecode from "jwt-decode";
+import { jwtDecode } from "jwt-decode";
 import * as authService from "../services/authService";
 
 export const AuthContext = createContext();
