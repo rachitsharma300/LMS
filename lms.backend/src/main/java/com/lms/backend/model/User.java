@@ -1,6 +1,7 @@
 package com.lms.backend.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -29,6 +30,7 @@ public class User {
 
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "role_id")
+    @JsonIgnoreProperties({"users"}) // ✅ ADD THIS LINE - Infinite loop fix
     private Role role;
 
     // ✅ Instructor's courses

@@ -1,61 +1,110 @@
 // src/context/AuthContext.jsx
-import React, { createContext, useState, useEffect } from "react";
+import React, { createContext, useState, useContext, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-// import jwtDecode from "jwt-decode";
 import { jwtDecode } from "jwt-decode";
 import * as authService from "../services/authService";
 
-export const AuthContext = createContext();
+const AuthContext = createContext();
+
+export const useAuth = () => {
+  const context = useContext(AuthContext);
+  if (!context) {
+    throw new Error('useAuth must be used within AuthProvider');
+  }
+  return context;
+};
 
 export const AuthProvider = ({ children }) => {
   const navigate = useNavigate();
   const [user, setUser] = useState(null);
+  const [loading, setLoading] = useState(true);
 
-  // ✅ Load user from token (if already logged in)
   useEffect(() => {
     const token = localStorage.getItem("token");
-    if (token) {
+    const userData = localStorage.getItem("userData");
+    
+    if (token && userData) {
       try {
-        const decoded = jwtDecode(token);
-        setUser(decoded);
-      } catch (err) {
-        console.error("Invalid token:", err);
-        localStorage.removeItem("token");
+        setUser(JSON.parse(userData));
+      } catch (error) {
+        console.error("Invalid user data:", error);
+        logout();
       }
     }
+    setLoading(false);
   }, []);
 
-  // ✅ Login function
   const login = async (credentials) => {
     try {
-      const { token } = await authService.login(credentials);
-      localStorage.setItem("token", token);
-      const decoded = jwtDecode(token);
-      setUser(decoded);
+      const response = await authService.login(credentials);
+      console.log("✅ Login Successful:", response);
 
-      const roles = Array.isArray(decoded.roles) ? decoded.roles : [decoded.roles];
-      if (roles.includes("ADMIN")) navigate("/admin/dashboard");
-      else if (roles.includes("INSTRUCTOR")) navigate("/instructor/dashboard");
-      else navigate("/student/dashboard");
-    } catch (err) {
-      throw err;
+      const { token, role, email, username } = response;
+      
+      if (!token) {
+        throw new Error("No token received");
+      }
+
+      // Process role
+      let userRole = role;
+      if (role?.includes('ROLE_')) {
+        userRole = role.replace('ROLE_', '');
+      }
+
+      const userData = {
+        token,
+        role: userRole,
+        email,
+        username
+      };
+
+      // Store in localStorage
+      localStorage.setItem("token", token);
+      localStorage.setItem("userData", JSON.stringify(userData));
+      
+      // Update state
+      setUser(userData);
+
+      // Redirect based on role
+      setTimeout(() => {
+        if (userRole === "ADMIN") {
+          navigate("/admin/dashboard", { replace: true });
+        } else if (userRole === "INSTRUCTOR") {
+          navigate("/instructor/dashboard", { replace: true });
+        } else if (userRole === "STUDENT") {
+          navigate("/student/dashboard", { replace: true });
+        }
+      }, 100);
+
+      return response;
+    } catch (error) {
+      console.error("❌ Login failed:", error);
+      throw error;
     }
   };
 
-  // ✅ Register
+  const logout = () => {
+    localStorage.removeItem("token");
+    localStorage.removeItem("userData");
+    setUser(null);
+    navigate("/login", { replace: true });
+  };
+
   const register = async (data) => {
     return await authService.register(data);
   };
 
-  // ✅ Logout
-  const logout = () => {
-    localStorage.removeItem("token");
-    setUser(null);
-    navigate("/login");
+  const value = {
+    user,
+    login,
+    logout,
+    register,
+    loading,
+    isAuthenticated: !!user
   };
 
   return (
-    <AuthContext.Provider value={{ user, login, logout, register }}>
+    <AuthContext.Provider value={value}>
       {children}
     </AuthContext.Provider>
   );
