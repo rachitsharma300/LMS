@@ -8,6 +8,8 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
+import java.util.Collections;
+
 @Service
 public class CustomUserDetailsService implements UserDetailsService {
 
@@ -20,10 +22,9 @@ public class CustomUserDetailsService implements UserDetailsService {
                 .orElseThrow(() -> new UsernameNotFoundException("User not found with email: " + email));
 
         return org.springframework.security.core.userdetails.User
-                .builder()
-                .username(user.getEmail())
-                .password(user.getPassword()) // encoded password
-                .roles(user.getRole().getName().name().replace("ROLE_", ""))
+                .withUsername(user.getEmail())
+                .password(user.getPassword())
+                .authorities(user.getRole().getName().name())
                 .build();
     }
 }
