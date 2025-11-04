@@ -3,6 +3,8 @@ import { Routes, Route, Navigate } from "react-router-dom";
 
 import Login from "../pages/auth/Login";
 import Signup from "../pages/auth/Signup";
+import UserManagement from '../pages/admin/UserManagement';
+import CourseApproval from '../pages/admin/CourseApproval';
 import AdminDashboard from "../pages/admin/Dashboard";
 import InstructorDashboard from "../pages/instructor/Dashboard";
 import StudentDashboard from "../pages/student/Dashboard";
@@ -11,29 +13,43 @@ import CourseViewer from "../pages/student/CourseViewer";
 export default function AppRoutes() {
   console.log("✅ AppRoutes rendered");
 
-  // ✅ This line makes React watch the token dynamically
-  const [token, setToken] = useState(localStorage.getItem("token"));
+  const [auth, setAuth] = useState({
+    token: localStorage.getItem("token"),
+    role: localStorage.getItem("userRole")
+  });
 
-  // ✅ Whenever token in localStorage changes (after login/logout), update state
+  // ✅ Listen for storage changes and custom events
   useEffect(() => {
-    const handleStorageChange = () => setToken(localStorage.getItem("token"));
+    const handleStorageChange = () => {
+      setAuth({
+        token: localStorage.getItem("token"),
+        role: localStorage.getItem("userRole")
+      });
+    };
+
+    const handleLoginEvent = () => {
+      handleStorageChange();
+    };
+
     window.addEventListener("storage", handleStorageChange);
-    return () => window.removeEventListener("storage", handleStorageChange);
+    window.addEventListener("login", handleLoginEvent);
+    
+    return () => {
+      window.removeEventListener("storage", handleStorageChange);
+      window.removeEventListener("login", handleLoginEvent);
+    };
   }, []);
 
-  let role = null;
-  try {
-    if (token) {
-      const payload = JSON.parse(atob(token.split(".")[1]));
-      role = payload.role;
-    }
-  } catch (err) {
-    console.error("⚠️ Token decode failed:", err);
-  }
-
   const ProtectedRoute = ({ children, allowedRoles }) => {
-    if (!token) return <Navigate to="/login" replace />;
-    if (allowedRoles && !allowedRoles.includes(role)) return <Navigate to="/login" replace />;
+    if (!auth.token) return <Navigate to="/login" replace />;
+    
+    // ✅ Get role from localStorage instead of decoding token
+    const userRole = auth.role?.replace('ROLE_', '');
+    
+    if (allowedRoles && !allowedRoles.includes(userRole)) {
+      return <Navigate to="/login" replace />;
+    }
+    
     return children;
   };
 
@@ -74,6 +90,22 @@ export default function AppRoutes() {
           </ProtectedRoute>
         }
       />
+      <Route
+  path="/admin/users"
+  element={
+    <ProtectedRoute allowedRoles={["ADMIN"]}>
+      <UserManagement />
+    </ProtectedRoute>
+  }
+/>
+<Route
+  path="/admin/courses"
+  element={
+    <ProtectedRoute allowedRoles={["ADMIN"]}>
+      <CourseApproval />
+    </ProtectedRoute>
+  }
+/>
       <Route path="*" element={<Navigate to="/login" replace />} />
     </Routes>
   );
