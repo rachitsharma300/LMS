@@ -1,11 +1,15 @@
+// InstructorController.java - UPDATE THIS PART
 package com.lms.backend.controller;
 
 import com.lms.backend.dto.CourseDto;
+import com.lms.backend.dto.LessonDto;
 import com.lms.backend.model.Course;
+import com.lms.backend.model.Lesson;
 import com.lms.backend.model.User;
 import com.lms.backend.service.InstructorService;
 import com.lms.backend.service.UserService;
 import com.lms.backend.util.CourseMapper;
+import com.lms.backend.util.LessonMapper; // ✅ IMPORT ADD KARE
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -23,6 +27,7 @@ public class InstructorController {
     @Autowired
     private UserService userService;
 
+    // ✅ EXISTING COURSE APIs (JO AAPKE PASS HAI)
     @PostMapping("/courses")
     public CourseDto createCourse(@RequestBody CourseDto courseDto) {
         User instructor = userService.getUserById(courseDto.getInstructorId());
@@ -41,5 +46,55 @@ public class InstructorController {
     public String deleteCourse(@PathVariable Long id) {
         instructorService.deleteCourse(id);
         return "Course deleted successfully";
+    }
+
+    // ✅ NEW APIs ADD KARE
+    @PutMapping("/courses/{id}")
+    public CourseDto updateCourse(@PathVariable Long id, @RequestBody CourseDto courseDto) {
+        User instructor = userService.getUserById(courseDto.getInstructorId());
+        Course updatedCourse = CourseMapper.toEntity(courseDto, instructor);
+        Course saved = instructorService.updateCourse(id, updatedCourse);
+        return CourseMapper.toDto(saved);
+    }
+
+    @GetMapping("/courses/{courseId}")
+    public CourseDto getCourseById(@PathVariable Long courseId) {
+        Course course = instructorService.getCourseById(courseId);
+        return CourseMapper.toDto(course);
+    }
+
+    // ✅ LESSON MANAGEMENT APIs (LessonMapper use kare)
+    @PostMapping("/courses/{courseId}/lessons")
+    public LessonDto addLesson(@PathVariable Long courseId, @RequestBody LessonDto lessonDto) {
+        Course course = instructorService.getCourseById(courseId);
+        Lesson lesson = LessonMapper.toEntity(lessonDto, course); // ✅ Course pass kare
+        Lesson saved = instructorService.addLesson(courseId, lesson);
+        return LessonMapper.toDto(saved);
+    }
+
+    @GetMapping("/courses/{courseId}/lessons")
+    public List<LessonDto> getCourseLessons(@PathVariable Long courseId) {
+        List<Lesson> lessons = instructorService.getLessonsByCourse(courseId);
+        return lessons.stream().map(LessonMapper::toDto).collect(Collectors.toList());
+    }
+
+    @PutMapping("/lessons/{lessonId}")
+    public LessonDto updateLesson(@PathVariable Long lessonId, @RequestBody LessonDto lessonDto) {
+        // For update, we don't need course, just update the lesson fields
+        Lesson lesson = new Lesson();
+        lesson.setTitle(lessonDto.getTitle());
+        lesson.setContent(lessonDto.getContent());
+        lesson.setMediaUrl(lessonDto.getMediaUrl());
+        lesson.setPosition(lessonDto.getPosition());
+        lesson.setDurationSeconds(lessonDto.getDurationSeconds());
+
+        Lesson updated = instructorService.updateLesson(lessonId, lesson);
+        return LessonMapper.toDto(updated);
+    }
+
+    @DeleteMapping("/lessons/{lessonId}")
+    public String deleteLesson(@PathVariable Long lessonId) {
+        instructorService.deleteLesson(lessonId);
+        return "Lesson deleted successfully";
     }
 }
