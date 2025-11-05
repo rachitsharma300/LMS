@@ -1,13 +1,15 @@
 package com.lms.backend.repository;
 
-import com.lms.backend.model.Lesson;
 import com.lms.backend.model.Course;
+import com.lms.backend.model.Lesson;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
+import java.util.Optional;
 
 @Repository
 public interface LessonRepository extends JpaRepository<Lesson, Long> {
-    List<Lesson> findByCourse(Course course);
+    List<Lesson> findByCourseOrderByOrderIndexAsc(Course course);
+    Optional<Lesson> findByIdAndCourse(Long id, Course course);
 }
