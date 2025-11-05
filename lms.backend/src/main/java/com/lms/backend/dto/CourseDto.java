@@ -5,6 +5,8 @@ import lombok.NoArgsConstructor;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 
+import java.time.LocalDateTime;
+
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
@@ -17,4 +19,7 @@ public class CourseDto {
     private boolean approved;
     private Long instructorId;      // ✅ for linking instructor
     private String instructorName;  // ✅ optional (for displaying instructor name)
+    private LocalDateTime createdAt;  // ✅ ADDED
+    private LocalDateTime updatedAt;  // ✅ ADDED
+    private Integer enrollmentCount;  // ✅ ADDED
 }

@@ -27,7 +27,9 @@ public class Course {
 
     private String coverImageUrl;
     private boolean approved = false;
-
+// add price
+    @Column(nullable = false)
+    private Double price = 0.0;
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
 

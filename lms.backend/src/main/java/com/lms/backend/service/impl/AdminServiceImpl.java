@@ -1,8 +1,10 @@
 package com.lms.backend.service.impl;
 
 import com.lms.backend.controller.AdminController;
+import com.lms.backend.model.Course;
 import com.lms.backend.model.Role;
 import com.lms.backend.model.User;
+import com.lms.backend.repository.CourseRepository;
 import com.lms.backend.repository.RoleRepository;
 import com.lms.backend.repository.UserRepository;
 import com.lms.backend.service.AdminService;
@@ -10,6 +12,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -25,6 +28,9 @@ public class AdminServiceImpl implements AdminService {
     private RoleRepository roleRepository;
 
     @Autowired
+    private CourseRepository courseRepository;
+
+    @Autowired
     private PasswordEncoder passwordEncoder;
 
     @Override
@@ -32,7 +38,6 @@ public class AdminServiceImpl implements AdminService {
         return userRepository.findAll();
     }
 
-    // ✅ FIXED: DTO se user create karo
     @Override
     public User createUser(AdminController.CreateUserRequest request) {
         // Check if email already exists
@@ -95,7 +100,14 @@ public class AdminServiceImpl implements AdminService {
     @Override
     public Map<String, Object> getAdminStats() {
         long totalUsers = userRepository.count();
+        long totalCourses = courseRepository.count();
 
+        // Count pending courses (not approved)
+        long pendingCourses = courseRepository.findAll().stream()
+                .filter(course -> !course.isApproved())
+                .count();
+
+        // Count users by role
         long totalStudents = userRepository.findAll().stream()
                 .filter(user -> user.getRole() != null &&
                         user.getRole().getName().equals(Role.RoleName.ROLE_STUDENT))
@@ -113,19 +125,58 @@ public class AdminServiceImpl implements AdminService {
 
         Map<String, Object> stats = new HashMap<>();
         stats.put("totalUsers", totalUsers);
+        stats.put("totalCourses", totalCourses);
+        stats.put("pendingCourses", pendingCourses);
         stats.put("totalStudents", totalStudents);
         stats.put("totalInstructors", totalInstructors);
         stats.put("totalAdmins", totalAdmins);
+        stats.put("totalRevenue", 284500); // Static for now
 
         return stats;
     }
 
     @Override
     public List<Map<String, Object>> getRecentActivity() {
+        try {
+            // Get recent courses (last 5)
+            List<Course> recentCourses = courseRepository.findAll().stream()
+                    .sorted((c1, c2) -> c2.getCreatedAt().compareTo(c1.getCreatedAt()))
+                    .limit(5)
+                    .toList();
+
+            // Convert to activity format
+            if (!recentCourses.isEmpty()) {
+                return recentCourses.stream().map(course -> {
+                    Map<String, Object> activity = new HashMap<>();
+                    activity.put("id", course.getId());
+                    activity.put("type", "course");
+                    activity.put("message",
+                            course.isApproved() ?
+                                    "Course \"" + course.getTitle() + "\" was approved" :
+                                    "Course \"" + course.getTitle() + "\" submitted for approval"
+                    );
+                    activity.put("time", formatTimeAgo(course.getCreatedAt()));
+                    activity.put("icon", course.isApproved() ? "✅" : "📚");
+                    return activity;
+                }).toList();
+            }
+        } catch (Exception e) {
+            System.out.println("Error fetching recent activities: " + e.getMessage());
+        }
+
+        // Fallback to mock data if no courses or error
         return List.of(
-                Map.of("action", "User registered", "description", "New student joined", "timestamp", new Date()),
-                Map.of("action", "Course created", "description", "New course added by instructor", "timestamp", new Date()),
-                Map.of("action", "User role updated", "description", "Admin updated user permissions", "timestamp", new Date())
+                Map.of("action", "User registered", "description", "New student joined", "timestamp", new Date(), "icon", "👤"),
+                Map.of("action", "Course created", "description", "New course added by instructor", "timestamp", new Date(), "icon", "📚"),
+                Map.of("action", "User role updated", "description", "Admin updated user permissions", "timestamp", new Date(), "icon", "⚙️")
         );
+    }
+
+    // ✅ HELPER METHOD FOR TIME FORMAT
+    private String formatTimeAgo(LocalDateTime dateTime) {
+        if (dateTime == null) {
+            return "Recently";
+        }
+        return dateTime.toLocalDate().toString();
     }
 }

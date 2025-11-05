@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { Routes, Route, Navigate } from "react-router-dom";
 
+import Home from "../pages/Home";
 import Login from "../pages/auth/Login";
 import Signup from "../pages/auth/Signup";
 import UserManagement from '../pages/admin/UserManagement';
@@ -9,6 +10,13 @@ import AdminDashboard from "../pages/admin/Dashboard";
 import InstructorDashboard from "../pages/instructor/Dashboard";
 import StudentDashboard from "../pages/student/Dashboard";
 import CourseViewer from "../pages/student/CourseViewer";
+
+// ✅ INSTRUCTOR COMPONENTS IMPORT
+import CreateCourse from "../pages/instructor/CreateCourse";
+import CourseDetail from "../pages/instructor/CourseDetail";
+import AddLesson from "../pages/instructor/AddLesson";
+import EnrolledStudents from "../pages/instructor/EnrolledStudents";
+import MediaUpload from "../pages/instructor/MediaUpload";
 
 export default function AppRoutes() {
   console.log("✅ AppRoutes rendered");
@@ -55,9 +63,13 @@ export default function AppRoutes() {
 
   return (
     <Routes>
+      <Route path="/" element={<Home />} />
+
+      {/* PUBLIC ROUTES */}
       <Route path="/login" element={<Login />} />
       <Route path="/signup" element={<Signup />} />
 
+      {/* ADMIN ROUTES */}
       <Route
         path="/admin/dashboard"
         element={
@@ -67,6 +79,24 @@ export default function AppRoutes() {
         }
       />
       <Route
+        path="/admin/users"
+        element={
+          <ProtectedRoute allowedRoles={["ADMIN"]}>
+            <UserManagement />
+          </ProtectedRoute>
+        }
+      />
+      <Route
+        path="/admin/courses"
+        element={
+          <ProtectedRoute allowedRoles={["ADMIN"]}>
+            <CourseApproval />
+          </ProtectedRoute>
+        }
+      />
+
+      {/* INSTRUCTOR ROUTES */}
+      <Route
         path="/instructor/dashboard"
         element={
           <ProtectedRoute allowedRoles={["INSTRUCTOR"]}>
@@ -74,6 +104,59 @@ export default function AppRoutes() {
           </ProtectedRoute>
         }
       />
+      <Route
+        path="/instructor/courses/new"
+        element={
+          <ProtectedRoute allowedRoles={["INSTRUCTOR"]}>
+            <CreateCourse />
+          </ProtectedRoute>
+        }
+      />
+      <Route
+        path="/instructor/courses/:id"
+        element={
+          <ProtectedRoute allowedRoles={["INSTRUCTOR"]}>
+            <CourseDetail />
+          </ProtectedRoute>
+        }
+      />
+      <Route
+        path="/instructor/courses/:id/lessons/new"
+        element={
+          <ProtectedRoute allowedRoles={["INSTRUCTOR"]}>
+            <AddLesson />
+          </ProtectedRoute>
+        }
+      />
+      <Route
+        path="/instructor/courses/:id/students"
+        element={
+          <ProtectedRoute allowedRoles={["INSTRUCTOR"]}>
+            <EnrolledStudents />
+          </ProtectedRoute>
+        }
+      />
+
+      <Route
+  path="/instructor/lessons/:lessonId/edit"
+  element={
+    <ProtectedRoute allowedRoles={["INSTRUCTOR"]}>
+      <AddLesson /> {/* Ya phir EditLesson component banao */}
+    </ProtectedRoute>
+  }
+/>
+
+
+      <Route
+        path="/instructor/courses/:id/media"
+        element={
+          <ProtectedRoute allowedRoles={["INSTRUCTOR"]}>
+            <MediaUpload />
+          </ProtectedRoute>
+        }
+      />
+
+      {/* STUDENT ROUTES */}
       <Route
         path="/student/dashboard"
         element={
@@ -90,22 +173,8 @@ export default function AppRoutes() {
           </ProtectedRoute>
         }
       />
-      <Route
-  path="/admin/users"
-  element={
-    <ProtectedRoute allowedRoles={["ADMIN"]}>
-      <UserManagement />
-    </ProtectedRoute>
-  }
-/>
-<Route
-  path="/admin/courses"
-  element={
-    <ProtectedRoute allowedRoles={["ADMIN"]}>
-      <CourseApproval />
-    </ProtectedRoute>
-  }
-/>
+
+      {/* DEFAULT ROUTE */}
       <Route path="*" element={<Navigate to="/login" replace />} />
     </Routes>
   );

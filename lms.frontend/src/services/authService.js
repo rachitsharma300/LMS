@@ -58,6 +58,12 @@ export const getCurrentUser = () => {
   const role = localStorage.getItem('userRole');
   const email = localStorage.getItem('userEmail');
   const username = localStorage.getItem('username');
-  
-  return token ? { token, role, email, username } : null;
+    const userId = localStorage.getItem('userId'); 
+  return token ? { 
+    token, 
+    role, 
+    email, 
+    username,
+    id: userId ? parseInt(userId) : null // ✅ Include user ID
+  } : null;
 };
