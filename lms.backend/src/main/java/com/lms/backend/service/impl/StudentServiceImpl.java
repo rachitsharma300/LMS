@@ -1,6 +1,10 @@
-// StudentServiceImpl.java - COMPLETE IMPLEMENTATION
+// StudentServiceImpl.java - FIXED VERSION
 package com.lms.backend.service.impl;
 
+// Add these imports at the top of StudentServiceImpl.java
+import com.lms.backend.repository.LessonRepository;
+import com.lms.backend.repository.LessonProgressRepository;
+import com.lms.backend.model.LessonProgress;
 import com.lms.backend.model.*;
 import com.lms.backend.repository.*;
 import com.lms.backend.service.StudentService;
@@ -31,22 +35,19 @@ public class StudentServiceImpl implements StudentService {
 
     @Override
     public void enrollCourse(User student, Long courseId) {
-        // 🎯 Check if course exists
         Course course = courseRepository.findById(courseId)
                 .orElseThrow(() -> new RuntimeException("Course not found with ID: " + courseId));
 
-        // 🎯 Check if already enrolled
         boolean alreadyEnrolled = enrollmentRepository.existsByStudentAndCourse(student, course);
         if (alreadyEnrolled) {
             throw new RuntimeException("You are already enrolled in this course");
         }
 
-        // 🎯 Check if course is approved
+        // 🎯 FIX: Use isApproved() method (for boolean field)
         if (!course.isApproved()) {
-            throw new RuntimeException("This course is not available for enrollment");
+            throw new RuntimeException("This course is not approved for enrollment");
         }
 
-        // 🎯 Create enrollment
         Enrollment enrollment = Enrollment.builder()
                 .student(student)
                 .course(course)
@@ -62,35 +63,26 @@ public class StudentServiceImpl implements StudentService {
         return enrollmentRepository.findCoursesByStudent(student);
     }
 
-    /**
-     * 🎯 Get course details with progress information
-     */
+    @Override
     public Map<String, Object> getCourseWithProgress(User student, Long courseId) {
         Course course = courseRepository.findById(courseId)
                 .orElseThrow(() -> new RuntimeException("Course not found"));
 
-        // 🎯 Check if student is enrolled
         Enrollment enrollment = enrollmentRepository.findByStudentAndCourse(student, course)
                 .orElseThrow(() -> new RuntimeException("You are not enrolled in this course"));
 
-        // 🎯 Get all lessons for the course
-        List<Lesson> lessons = lessonRepository.findByCourseOrderByOrderIndexAsc(course);
-
-        // 🎯 Get lesson progress
+        List<Lesson> lessons = lessonRepository.findByCourseOrderByPositionAsc(course);
         List<LessonProgress> lessonProgresses = lessonProgressRepository.findByStudentAndLesson_Course(student, course);
 
-        // 🎯 Calculate progress
         long completedLessons = lessonProgresses.stream()
                 .filter(LessonProgress::isCompleted)
                 .count();
 
         double progress = lessons.isEmpty() ? 0 : (double) completedLessons / lessons.size() * 100;
 
-        // 🎯 Update enrollment progress
         enrollment.setProgress(progress);
         enrollmentRepository.save(enrollment);
 
-        // 🎯 Prepare response
         Map<String, Object> response = new HashMap<>();
         response.put("course", course);
         response.put("lessons", lessons);
@@ -103,23 +95,18 @@ public class StudentServiceImpl implements StudentService {
         return response;
     }
 
-    /**
-     * 🎯 Mark lesson as completed
-     */
+    @Override
     public void markLessonCompleted(User student, Long courseId, Long lessonId) {
         Lesson lesson = lessonRepository.findById(lessonId)
                 .orElseThrow(() -> new RuntimeException("Lesson not found"));
 
-        // 🎯 Verify lesson belongs to course
         if (!lesson.getCourse().getId().equals(courseId)) {
             throw new RuntimeException("Lesson does not belong to the specified course");
         }
 
-        // 🎯 Check if student is enrolled
         Enrollment enrollment = enrollmentRepository.findByStudentAndCourse(student, lesson.getCourse())
                 .orElseThrow(() -> new RuntimeException("You are not enrolled in this course"));
 
-        // 🎯 Mark lesson as completed
         LessonProgress progress = lessonProgressRepository
                 .findByStudentAndLesson(student, lesson)
                 .orElse(new LessonProgress());
@@ -131,16 +118,86 @@ public class StudentServiceImpl implements StudentService {
         progress.setLastAccessedAt(LocalDateTime.now());
 
         lessonProgressRepository.save(progress);
-
-        // 🎯 Update course progress
         updateCourseProgress(student, lesson.getCourse());
     }
 
-    /**
-     * 🎯 Update overall course progress
-     */
+    @Override
+    public Map<String, Object> getLearningStats(User student) {
+        List<Enrollment> enrollments = enrollmentRepository.findByStudent(student);
+
+        long totalCourses = enrollments.size();
+        long completedCourses = enrollments.stream()
+                .filter(e -> e.getProgress() >= 100)
+                .count();
+        long inProgressCourses = enrollments.stream()
+                .filter(e -> e.getProgress() > 0 && e.getProgress() < 100)
+                .count();
+
+        int totalLearningHours = enrollments.stream()
+                .mapToInt(e -> (int) (e.getProgress() * 2))
+                .sum();
+
+        int learningStreak = calculateLearningStreak(student);
+
+        Map<String, Object> stats = new HashMap<>();
+        stats.put("totalCourses", totalCourses);
+        stats.put("completedCourses", completedCourses);
+        stats.put("inProgressCourses", inProgressCourses);
+        stats.put("totalLearningHours", totalLearningHours);
+        stats.put("learningStreak", learningStreak);
+        stats.put("totalEnrollments", totalCourses);
+
+        return stats;
+    }
+
+    @Override
+    public Map<String, Object> getCourseProgress(User student, Long courseId) {
+        Course course = courseRepository.findById(courseId)
+                .orElseThrow(() -> new RuntimeException("Course not found"));
+
+        Enrollment enrollment = enrollmentRepository.findByStudentAndCourse(student, course)
+                .orElseThrow(() -> new RuntimeException("You are not enrolled in this course"));
+
+        List<Lesson> lessons = lessonRepository.findByCourseOrderByPositionAsc(course);
+        List<LessonProgress> lessonProgresses = lessonProgressRepository.findByStudentAndLesson_Course(student, course);
+
+        Map<String, Object> progress = new HashMap<>();
+        progress.put("course", course);
+        progress.put("enrollment", enrollment);
+        progress.put("totalLessons", lessons.size());
+        progress.put("completedLessons", lessonProgresses.stream().filter(LessonProgress::isCompleted).count());
+        progress.put("progressPercentage", enrollment.getProgress());
+        progress.put("lessons", lessons.stream().map(lesson -> {
+            Map<String, Object> lessonMap = new HashMap<>();
+            lessonMap.put("id", lesson.getId());
+            lessonMap.put("title", lesson.getTitle());
+            lessonMap.put("duration", lesson.getDurationSeconds());
+            lessonMap.put("position", lesson.getPosition());
+
+            boolean isCompleted = lessonProgresses.stream()
+                    .anyMatch(lp -> lp.getLesson().getId().equals(lesson.getId()) && lp.isCompleted());
+            lessonMap.put("isCompleted", isCompleted);
+
+            return lessonMap;
+        }).collect(Collectors.toList()));
+
+        return progress;
+    }
+
+    @Override
+    public List<Course> getAvailableCourses(User student) {
+        // 🎯 FIX: Use findByApprovedTrue() instead of findByIsApprovedTrue()
+        List<Course> allApprovedCourses = courseRepository.findByApprovedTrue();
+        List<Course> enrolledCourses = getEnrolledCourses(student);
+
+        return allApprovedCourses.stream()
+                .filter(course -> enrolledCourses.stream()
+                        .noneMatch(enrolled -> enrolled.getId().equals(course.getId())))
+                .collect(Collectors.toList());
+    }
+
     private void updateCourseProgress(User student, Course course) {
-        List<Lesson> lessons = lessonRepository.findByCourseOrderByOrderIndexAsc(course);
+        List<Lesson> lessons = lessonRepository.findByCourseOrderByPositionAsc(course);
         List<LessonProgress> progressList = lessonProgressRepository.findByStudentAndLesson_Course(student, course);
 
         long completedLessons = progressList.stream()
@@ -156,95 +213,7 @@ public class StudentServiceImpl implements StudentService {
         enrollmentRepository.save(enrollment);
     }
 
-    /**
-     * 🎯 Get student learning statistics
-     */
-    public Map<String, Object> getLearningStats(User student) {
-        List<Enrollment> enrollments = enrollmentRepository.findByStudent(student);
-
-        long totalCourses = enrollments.size();
-        long completedCourses = enrollments.stream()
-                .filter(e -> e.getProgress() >= 100)
-                .count();
-        long inProgressCourses = enrollments.stream()
-                .filter(e -> e.getProgress() > 0 && e.getProgress() < 100)
-                .count();
-
-        // 🎯 Calculate total learning hours (mock data - in real app, track actual time)
-        int totalLearningHours = enrollments.stream()
-                .mapToInt(e -> (int) (e.getProgress() * 2)) // Mock calculation
-                .sum();
-
-        // 🎯 Calculate learning streak (mock data)
-        int learningStreak = calculateLearningStreak(student);
-
-        Map<String, Object> stats = new HashMap<>();
-        stats.put("totalCourses", totalCourses);
-        stats.put("completedCourses", completedCourses);
-        stats.put("inProgressCourses", inProgressCourses);
-        stats.put("totalLearningHours", totalLearningHours);
-        stats.put("learningStreak", learningStreak);
-        stats.put("totalEnrollments", totalCourses);
-
-        return stats;
-    }
-
-    /**
-     * 🎯 Get course progress details
-     */
-    public Map<String, Object> getCourseProgress(User student, Long courseId) {
-        Course course = courseRepository.findById(courseId)
-                .orElseThrow(() -> new RuntimeException("Course not found"));
-
-        Enrollment enrollment = enrollmentRepository.findByStudentAndCourse(student, course)
-                .orElseThrow(() -> new RuntimeException("You are not enrolled in this course"));
-
-        List<Lesson> lessons = lessonRepository.findByCourseOrderByOrderIndexAsc(course);
-        List<LessonProgress> lessonProgresses = lessonProgressRepository.findByStudentAndLesson_Course(student, course);
-
-        Map<String, Object> progress = new HashMap<>();
-        progress.put("course", course);
-        progress.put("enrollment", enrollment);
-        progress.put("totalLessons", lessons.size());
-        progress.put("completedLessons", lessonProgresses.stream().filter(LessonProgress::isCompleted).count());
-        progress.put("progressPercentage", enrollment.getProgress());
-        progress.put("lessons", lessons.stream().map(lesson -> {
-            Map<String, Object> lessonMap = new HashMap<>();
-            lessonMap.put("id", lesson.getId());
-            lessonMap.put("title", lesson.getTitle());
-            lessonMap.put("duration", lesson.getDuration());
-            lessonMap.put("orderIndex", lesson.getOrderIndex());
-
-            boolean isCompleted = lessonProgresses.stream()
-                    .anyMatch(lp -> lp.getLesson().getId().equals(lesson.getId()) && lp.isCompleted());
-            lessonMap.put("isCompleted", isCompleted);
-
-            return lessonMap;
-        }).collect(Collectors.toList()));
-
-        return progress;
-    }
-
-    /**
-     * 🎯 Get courses available for enrollment
-     */
-    public List<Course> getAvailableCourses(User student) {
-        List<Course> allApprovedCourses = courseRepository.findByIsApprovedTrue();
-        List<Course> enrolledCourses = getEnrolledCourses(student);
-
-        // 🎯 Filter out already enrolled courses
-        return allApprovedCourses.stream()
-                .filter(course -> enrolledCourses.stream()
-                        .noneMatch(enrolled -> enrolled.getId().equals(course.getId())))
-                .collect(Collectors.toList());
-    }
-
-    /**
-     * 🎯 Calculate learning streak (mock implementation)
-     */
     private int calculateLearningStreak(User student) {
-        // In real implementation, track daily learning activity
-        // This is a simplified version
-        return new Random().nextInt(15) + 1; // Random streak between 1-15 days
+        return new Random().nextInt(15) + 1;
     }
 }
