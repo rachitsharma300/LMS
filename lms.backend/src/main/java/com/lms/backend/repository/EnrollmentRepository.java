@@ -18,10 +18,4 @@ public interface EnrollmentRepository extends JpaRepository<Enrollment, Long> {
 
     @Query("SELECT e.course FROM Enrollment e WHERE e.student = :student")
     List<Course> findCoursesByStudent(User student);
-
-    @Query("SELECT e FROM Enrollment e WHERE e.student = :student AND e.progress >= 100")
-    List<Enrollment> findCompletedEnrollmentsByStudent(User student);
-
-    @Query("SELECT e FROM Enrollment e WHERE e.student = :student AND e.progress > 0 AND e.progress < 100")
-    List<Enrollment> findInProgressEnrollmentsByStudent(User student);
 }
