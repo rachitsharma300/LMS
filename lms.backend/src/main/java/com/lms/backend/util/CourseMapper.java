@@ -13,6 +13,14 @@ public class CourseMapper {
         course.setCoverImageUrl(dto.getCoverImageUrl());
         course.setApproved(dto.isApproved());
         course.setInstructor(instructor); // ✅ now it's a User object
+
+        course.setCategory(dto.getCategory());
+        course.setLevel(dto.getLevel());
+        course.setRating(dto.getRating());
+        course.setTotalStudents(dto.getTotalStudents());
+        course.setDuration(dto.getDuration());
+        course.setPrice(dto.getPrice());
+
         return course;
     }
 
@@ -29,6 +37,15 @@ public class CourseMapper {
             dto.setInstructorId(course.getInstructor().getId());
             dto.setInstructorName(course.getInstructor().getUsername());
         }
+
+
+        dto.setCategory(course.getCategory());
+        dto.setLevel(course.getLevel());
+        dto.setRating(course.getRating());
+        dto.setTotalStudents(course.getTotalStudents());
+        dto.setDuration(course.getDuration());
+        dto.setPrice(course.getPrice());
+
         return dto;
     }
 }
