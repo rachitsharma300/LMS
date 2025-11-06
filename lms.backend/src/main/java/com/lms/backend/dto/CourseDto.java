@@ -22,4 +22,11 @@ public class CourseDto {
     private LocalDateTime createdAt;  // ✅ ADDED
     private LocalDateTime updatedAt;  // ✅ ADDED
     private Integer enrollmentCount;  // ✅ ADDED
+
+    private String category;
+    private String level;
+    private Double rating;
+    private Integer totalStudents;
+    private String duration;
+    private Double price;
 }
