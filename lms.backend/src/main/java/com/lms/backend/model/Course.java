@@ -3,7 +3,6 @@ package com.lms.backend.model;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import lombok.*;
-
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -14,7 +13,6 @@ import java.util.List;
 @NoArgsConstructor
 @Builder
 public class Course {
-
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -27,13 +25,18 @@ public class Course {
 
     private String coverImageUrl;
     private boolean approved = false;
-// add price
-    @Column(nullable = false)
     private Double price = 0.0;
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
 
-    @ManyToOne(fetch = FetchType.EAGER)
+    // 🎯 ADD THESE FIELDS
+    private String category;
+    private String level;
+    private Double rating = 0.0;
+    private Integer totalStudents = 0;
+    private String duration;
+
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "instructor_id")
     private User instructor;
 
