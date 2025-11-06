@@ -42,10 +42,10 @@ public class Enrollment {
     // progress percent (0-100)
     private Double progress = 0.0;
 
-    @PrePersist
-    protected void prePersist() {
-        if (enrolledAt == null) {
-            enrolledAt = LocalDateTime.now();
-        }
-    }
+//    @PrePersist
+//    protected void prePersist() {
+//        if (enrolledAt == null) {
+//            enrolledAt = LocalDateTime.now();
+//        }
+//    }
 }
