@@ -11,7 +11,10 @@ export default function CreateCourse() {
     title: '',
     description: '',
     price: '',
-    coverImageUrl: ''
+    coverImageUrl: '',
+    category: 'Programming',
+    level: 'BEGINNER',
+    duration: 0
   });
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
@@ -24,6 +27,7 @@ export default function CreateCourse() {
       toast.error('Please login first');
       return;
     }
+
 
     setLoading(true);
     
