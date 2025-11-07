@@ -36,7 +36,7 @@ public class Course {
     private Integer totalStudents = 0;
     private String duration;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "instructor_id")
     private User instructor;
 
