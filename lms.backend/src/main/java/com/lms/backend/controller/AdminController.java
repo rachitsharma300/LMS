@@ -1,5 +1,6 @@
 package com.lms.backend.controller;
 
+import com.lms.backend.dto.CourseDto;
 import com.lms.backend.model.User;
 import com.lms.backend.service.AdminService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,7 +24,7 @@ public class AdminController {
         return adminService.getAllUsers();
     }
 
-    // ✅ FIXED: CreateUserRequest use karo
+    // Create User Request
     @PostMapping("/users")
     public ResponseEntity<User> createUser(@RequestBody CreateUserRequest request) {
         User createdUser = adminService.createUser(request);
@@ -33,7 +34,7 @@ public class AdminController {
     @DeleteMapping("/users/{id}")
     public String deleteUser(@PathVariable Long id) {
         adminService.deleteUser(id);
-        return "✅ User deleted successfully.";
+        return "User deleted successfully.";
     }
 
     @PutMapping("/users/{id}/role")
@@ -51,7 +52,21 @@ public class AdminController {
         return adminService.getRecentActivity();
     }
 
-    // ✅ ADD THIS INNER CLASS
+    @GetMapping("/courses/pending")
+    public List<CourseDto> getPendingCourses() {
+        return adminService.getPendingCourses();
+    }
+
+    @PutMapping("/courses/{courseId}/approve")
+    public CourseDto approveCourse(@PathVariable Long courseId) {
+        return adminService.approveCourse(courseId);
+    }
+
+    @PutMapping("/courses/{courseId}/reject")
+    public CourseDto rejectCourse(@PathVariable Long courseId) {
+        return adminService.rejectCourse(courseId);
+    }
+
     public static class CreateUserRequest {
         private String username;
         private String email;
