@@ -13,8 +13,8 @@ public class LessonDto {
     private Long id;
     private String title;
     private String content;
-    private String mediaUrl;        // ✅ ADDED
-    private Integer position;       // ✅ ADDED
-    private Integer durationSeconds; // ✅ ADDED
-    private Long courseId; // ✅ refers to parent course
+    private String mediaUrl;
+    private Integer position;
+    private Integer durationSeconds;
+    private Long courseId;
 }

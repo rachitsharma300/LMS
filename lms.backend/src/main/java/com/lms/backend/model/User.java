@@ -30,15 +30,15 @@ public class User {
 
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "role_id")
-    @JsonIgnoreProperties({"users"}) // ✅ ADD THIS LINE - Infinite loop fix
+    @JsonIgnoreProperties({"users"}) // Prevent Infinite loop
     private Role role;
 
-    // ✅ Instructor's courses
+    // Instructor courses
     @OneToMany(mappedBy = "instructor", cascade = CascadeType.ALL, orphanRemoval = true)
     @JsonIgnore
     private List<Course> courses;
 
-    // ✅ Student's enrollments
+    // Students enrollments
     @OneToMany(mappedBy = "student", cascade = CascadeType.ALL, orphanRemoval = true)
     @JsonIgnore
     private List<Enrollment> enrollments;

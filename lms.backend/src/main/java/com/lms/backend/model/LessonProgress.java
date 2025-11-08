@@ -1,4 +1,3 @@
-// LessonProgress.java - Track student lesson completion
 package com.lms.backend.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
@@ -38,7 +37,7 @@ public class LessonProgress {
 
     private LocalDateTime lastAccessedAt;
 
-    private Integer timeSpent; // in minutes
+    private Integer timeSpent; // in min
 
     @PrePersist
     protected void prePersist() {

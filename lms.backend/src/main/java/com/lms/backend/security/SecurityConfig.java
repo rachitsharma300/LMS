@@ -28,17 +28,17 @@ public class SecurityConfig {
     @Autowired
     private CustomUserDetailsService customUserDetailsService;
 
-    // ✅ Create JwtAuthenticationFilter as a bean
+    // Create JwtAuthenticationFilter as a bean
     @Bean
     public JwtAuthenticationFilter jwtAuthenticationFilter() {
         return new JwtAuthenticationFilter();
     }
 
-    // ✅ ADD CORS CONFIGURATION
+    // ADD CORS CONFIGURATION
     @Bean
     public CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration configuration = new CorsConfiguration();
-        configuration.setAllowedOriginPatterns(Arrays.asList("*")); // ✅ Allow all origins with patterns
+        configuration.setAllowedOriginPatterns(Arrays.asList("*")); // Allow all origins
         configuration.setAllowedMethods(Arrays.asList("GET", "POST", "PUT", "DELETE", "OPTIONS"));
         configuration.setAllowedHeaders(Arrays.asList("*"));
         configuration.setAllowCredentials(true);
@@ -52,29 +52,29 @@ public class SecurityConfig {
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http
                 .csrf(csrf -> csrf.disable())
-                .cors(cors -> cors.configurationSource(corsConfigurationSource())) // ✅ USE CORS CONFIG
+                .cors(cors -> cors.configurationSource(corsConfigurationSource())) // USE CORS CONFIG
                 .authorizeHttpRequests(auth -> auth
-                        // ✅ Public endpoints
+                        // Public endpoints
                         .requestMatchers("/api/auth/**").permitAll()
 
-                        // ✅ Role-based protected endpoints
+                        // Role-based protected endpoints
                         .requestMatchers("/api/admin/**").hasAuthority("ROLE_ADMIN")
                         .requestMatchers("/api/instructor/**").hasAuthority("ROLE_INSTRUCTOR")
                         .requestMatchers("/api/student/**").hasAuthority("ROLE_STUDENT")
 
-                        // ✅ Any other request requires authentication
+                        //  Any other request requires authentication
                         .anyRequest().authenticated()
                 )
-                // ✅ Handle unauthorized access
+                // Handle unauthorized access
                 .exceptionHandling(ex -> ex
                         .authenticationEntryPoint(jwtAuthenticationEntryPoint)
                 )
-                // ✅ Make it stateless (JWT-based)
+                // Make it stateless (JWT-based)
                 .sessionManagement(sess -> sess
                         .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 );
 
-        // ✅ Add JWT filter before UsernamePasswordAuthenticationFilter
+        // Add JWT filter before UsernamePasswordAuthenticationFilter
         http.addFilterBefore(jwtAuthenticationFilter(), UsernamePasswordAuthenticationFilter.class);
 
         return http.build();

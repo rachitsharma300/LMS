@@ -3,49 +3,28 @@ package com.lms.backend.service;
 import com.lms.backend.model.Lesson;
 import java.util.List;
 
-/**
- * LessonService Interface
- *
- * Yeh interface Lesson related saari business logic methods define karta hai.
- * LessonServiceImpl class is interface ko implement karegi.
- */
+    // Lesson Interface related for all business logic methods
 public interface LessonService {
 
-    /**
-     * ✅ Course ID ke through us course ke saare lessons get kare
-     * @param courseId - Jis course ke lessons chahiye
-     * @return List of Lesson objects
-     */
+    // Get lessons through Course id @param courseID, @return List of lessons objects
     List<Lesson> getLessonsByCourseId(Long courseId);
 
     /**
-     * ✅ Lesson ID se specific lesson ka data get kare
-     * @param id - Lesson ka unique ID
+     * To Get specific lesson through Lesson ID
+     * @param id - Lesson unique ID
      * @return Lesson object
-     * @throws RuntimeException agar lesson nahi mila toh
+     * @throws RuntimeException if Lesson no find
      */
     Lesson getLessonById(Long id);
 
     /**
-     * ✅ Naya lesson create kare specific course ke liye
-     * @param courseId - Jis course mein lesson add karna hai
-     * @param lesson - Lesson ka data
-     * @return Saved Lesson object
+     * Create new lesson for specific courses
      */
     Lesson createLesson(Long courseId, Lesson lesson);
 
-    /**
-     * ✅ Existing lesson ko update kare
-     * @param id - Lesson ka ID jo update karna hai
-     * @param lessonDetails - Updated lesson data
-     * @return Updated Lesson object
-     */
+     // To Update Existing lesson
     Lesson updateLesson(Long id, Lesson lessonDetails);
 
-    /**
-     * ✅ Lesson delete kare
-     * @param id - Lesson ka ID jo delete karna hai
-     * @throws RuntimeException agar lesson nahi mila toh
-     */
+     // Lesson delete
     void deleteLesson(Long id);
 }

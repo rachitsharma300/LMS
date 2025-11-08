@@ -42,21 +42,21 @@ public class AuthController {
     @PostMapping("/signup")
     public ResponseEntity<?> registerUser(@RequestBody SignupRequest request) {
         try {
-            // ✅ Check if email exists
+            // Check if email exists
             if (userRepository.existsByEmail(request.getEmail())) {
                 Map<String, String> response = new HashMap<>();
                 response.put("message", "Email already exists!");
                 return ResponseEntity.badRequest().body(response);
             }
 
-            // ✅ FIX: Always set role to STUDENT for signup
+            // Always set role to STUDENT for signup
             Role role = roleRepository.findByName(Role.RoleName.ROLE_STUDENT)
                     .orElseGet(() -> {
                         Role newRole = Role.builder().name(Role.RoleName.ROLE_STUDENT).build();
                         return roleRepository.save(newRole);
                     });
 
-            // ✅ Create user
+            // Create user
             User user = User.builder()
                     .username(request.getUsername())
                     .email(request.getEmail())
@@ -80,19 +80,19 @@ public class AuthController {
     @PostMapping("/login")
     public ResponseEntity<?> loginUser(@RequestBody LoginRequest request) {
         try {
-            // ✅ Authenticate user
+            // Authenticate user
             Authentication authentication = authenticationManager.authenticate(
                     new UsernamePasswordAuthenticationToken(request.getEmail(), request.getPassword())
             );
 
-            // ✅ Generate token
+            // Generate token
             String token = jwtTokenProvider.generateToken(authentication);
 
-            // ✅ Get user details for response
+            // Get user details for response
             User user = userRepository.findByEmail(request.getEmail())
                     .orElseThrow(() -> new RuntimeException("User not found"));
 
-            // ✅ Prepare response
+            // Prepare response
             Map<String, Object> response = new HashMap<>();
             response.put("token", token);
             response.put("email", user.getEmail());

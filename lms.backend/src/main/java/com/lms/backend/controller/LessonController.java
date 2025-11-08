@@ -19,7 +19,7 @@ public class LessonController {
     @Autowired
     private LessonService lessonService;
 
-    // ✅ GET LESSONS BY COURSE ID
+    // GET LESSONS BY COURSE ID
     @GetMapping("/course/{courseId}")
     public ResponseEntity<List<LessonDto>> getLessonsByCourse(@PathVariable Long courseId) {
         try {
@@ -33,7 +33,7 @@ public class LessonController {
         }
     }
 
-    // ✅ GET LESSON BY ID
+    // GET LESSON BY ID
     @GetMapping("/{id}")
     public ResponseEntity<LessonDto> getLessonById(@PathVariable Long id) {
         try {
@@ -44,7 +44,7 @@ public class LessonController {
         }
     }
 
-    // ✅ CREATE NEW LESSON
+    // CREATE NEW LESSON
     @PostMapping("/course/{courseId}")
     public ResponseEntity<LessonDto> createLesson(
             @PathVariable Long courseId,
@@ -58,7 +58,7 @@ public class LessonController {
         }
     }
 
-    // ✅ UPDATE LESSON
+    // UPDATE LESSON
     @PutMapping("/{id}")
     public ResponseEntity<LessonDto> updateLesson(
             @PathVariable Long id,
@@ -72,7 +72,7 @@ public class LessonController {
         }
     }
 
-    // ✅ DELETE LESSON
+    // DELETE LESSON
     @DeleteMapping("/{id}")
     public ResponseEntity<String> deleteLesson(@PathVariable Long id) {
         try {

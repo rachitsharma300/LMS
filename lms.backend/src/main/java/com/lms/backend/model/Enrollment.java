@@ -22,7 +22,7 @@ public class Enrollment {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    // student linking
+    // student linking ------ EAGER
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "student_id", nullable = false)
     @NotNull
@@ -48,4 +48,5 @@ public class Enrollment {
 //            enrolledAt = LocalDateTime.now();
 //        }
 //    }
+
 }

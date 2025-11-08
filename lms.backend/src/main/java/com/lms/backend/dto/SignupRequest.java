@@ -14,5 +14,5 @@ public class SignupRequest {
     private String username;
     private String email;
     private String password;
-    private String role; // Example: "ROLE_STUDENT", "ROLE_INSTRUCTOR", "ROLE_ADMIN"
+    private String role; // Ex: "ROLE_STUDENT", "ROLE_INSTRUCTOR", "ROLE_ADMIN"
 }

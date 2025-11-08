@@ -45,12 +45,10 @@ public class JwtTokenProvider {
                 .compact();
     }
 
-    // ✅ FIX 1: Renamed method to match what JwtAuthenticationFilter expects
     public String getUsernameFromJWT(String token) {
         return getUsernameFromToken(token);
     }
 
-    // ✅ Keep original method for backward compatibility
     public String getUsernameFromToken(String token) {
         Claims claims = Jwts.parserBuilder()
                 .setSigningKey(jwtSecret)
@@ -81,7 +79,7 @@ public class JwtTokenProvider {
         return false;
     }
 
-    // ✅ Extract role from token
+    // Extract role from token
     public String getRoleFromToken(String token) {
         try {
             Claims claims = Jwts.parserBuilder()

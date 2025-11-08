@@ -19,28 +19,6 @@ public class CourseServiceImpl implements CourseService {
         return courseRepository.save(course);
     }
 
-//    @Override
-//    public Course updateCourse(Long id, Course updatedCourse) {
-//        Course course = courseRepository.findById(id)
-//                .orElseThrow(() -> new RuntimeException("Course not found"));
-//        course.setTitle(updatedCourse.getTitle());
-//        course.setDescription(updatedCourse.getDescription());
-//        return courseRepository.save(course);
-//    }
-
-//    @Override
-//    public Course updateCourse(Long id, Course updatedCourse) {
-//        Course course = courseRepository.findById(id)
-//                .orElseThrow(() -> new RuntimeException("Course not found"));
-//
-//        course.setTitle(updatedCourse.getTitle());
-//        course.setDescription(updatedCourse.getDescription());
-//        course.setCoverImageUrl(updatedCourse.getCoverImageUrl());
-//        course.setApproved(updatedCourse.isApproved()); // ✅ ADD THIS LINE
-//
-//        return courseRepository.save(course);
-//    }
-
     @Override
     public Course updateCourse(Long id, Course updatedCourse) {
         Course course = courseRepository.findById(id)
@@ -49,10 +27,10 @@ public class CourseServiceImpl implements CourseService {
         course.setTitle(updatedCourse.getTitle());
         course.setDescription(updatedCourse.getDescription());
         course.setCoverImageUrl(updatedCourse.getCoverImageUrl());
-        course.setApproved(updatedCourse.isApproved()); // ✅ This should work
+        course.setApproved(updatedCourse.isApproved());
 
         Course savedCourse = courseRepository.save(course);
-        System.out.println("✅ Updated course - ID: " + savedCourse.getId() + ", Approved: " + savedCourse.isApproved());
+        System.out.println("Updated course - ID: " + savedCourse.getId() + ", Approved: " + savedCourse.isApproved());
         return savedCourse;
     }
 
