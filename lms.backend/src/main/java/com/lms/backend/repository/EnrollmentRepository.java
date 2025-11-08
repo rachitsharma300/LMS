@@ -5,6 +5,7 @@ import com.lms.backend.model.Enrollment;
 import com.lms.backend.model.User;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
@@ -16,6 +17,9 @@ public interface EnrollmentRepository extends JpaRepository<Enrollment, Long> {
     Optional<Enrollment> findByStudentAndCourse(User student, Course course);
     List<Enrollment> findByStudent(User student);
 
-    @Query("SELECT e.course FROM Enrollment e WHERE e.student = :student")
-    List<Course> findCoursesByStudent(User student);
+//    @Query("SELECT e.course FROM Enrollment e WHERE e.student = :student")
+//    List<Course> findCoursesByStudent(User student);
+
+    @Query("SELECT e.course FROM Enrollment e WHERE e.student.id = :studentId")
+    List<Course> findCoursesByStudentId(@Param("studentId") Long studentId);
 }
