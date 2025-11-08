@@ -1,10 +1,11 @@
 // src/pages/auth/Signup.jsx - PROFESSIONAL STUDENT SIGNUP
 import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import { register } from "../../services/authService";
+import { useAuth } from "../../context/AuthContext";
 
 export default function Signup() {
   const navigate = useNavigate();
+  const { register } = useAuth();
   const [form, setForm] = useState({
     username: "",
     email: "",
@@ -74,7 +75,7 @@ export default function Signup() {
         username: form.username,
         email: form.email,
         password: form.password,
-        role: "ROLE_STUDENT"
+        // role: "ROLE_STUDENT"
       };
       
       console.log("📤 Sending signup data:", signupData);
@@ -82,15 +83,15 @@ export default function Signup() {
       const response = await register(signupData);
       console.log("✅ Signup successful:", response);
       
-      setTimeout(() => {
-        navigate("/login", { 
-          replace: true,
-          state: { 
-            success: true,
-            message: "Student account created successfully! Please login." 
-          }
-        });
-      }, 1000);
+      // setTimeout(() => {
+      //   navigate("/login", { 
+      //     replace: true,
+      //     state: { 
+      //       success: true,
+      //       message: "Student account created successfully! Please login." 
+      //     }
+      //   });
+      // }, 1000);
       
     } catch (err) {
       console.error("❌ Signup failed:", err);
