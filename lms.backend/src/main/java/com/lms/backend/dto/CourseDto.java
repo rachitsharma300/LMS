@@ -17,16 +17,17 @@ public class CourseDto {
     private String description;
     private String coverImageUrl;
     private boolean approved;
-    private Long instructorId;      // ✅ for linking instructor
-    private String instructorName;  // ✅ optional (for displaying instructor name)
-    private LocalDateTime createdAt;  // ✅ ADDED
-    private LocalDateTime updatedAt;  // ✅ ADDED
-    private Integer enrollmentCount;  // ✅ ADDED
-
+    private Long instructorId;
+    private String instructorName;
+    private LocalDateTime createdAt;
+    private LocalDateTime updatedAt;
+    private Integer enrollmentCount;
     private String category;
     private String level;
     private Double rating;
     private Integer totalStudents;
     private String duration;
     private Double price;
+    private Long categoryId;
+    private String categoryName;
 }
