@@ -1,5 +1,6 @@
 package com.lms.backend.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import lombok.*;
@@ -19,22 +20,21 @@ public class Course {
 
     @Column(nullable = false)
     private String title;
-
     @Column(length = 2000)
     private String description;
-
     private String coverImageUrl;
     private boolean approved = false;
     private Double price = 0.0;
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
-
-    // 🎯 ADD THESE FIELDS
-    private String category;
     private String level;
     private Double rating = 0.0;
     private Integer totalStudents = 0;
     private String duration;
+
+    @ManyToOne
+    @JoinColumn(name = "category_id")
+    private Category category;
 
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "instructor_id")
@@ -43,6 +43,11 @@ public class Course {
     @OneToMany(mappedBy = "course", cascade = CascadeType.ALL, orphanRemoval = true)
     @JsonManagedReference
     private List<Lesson> lessons;
+
+    // Enrollment relationship
+    @OneToMany(mappedBy = "course", cascade = CascadeType.ALL, orphanRemoval = true)
+    @JsonIgnore  // To prevent Infinite loop
+    private List<Enrollment> enrollments;
 
     @PrePersist
     protected void onCreate() {
@@ -53,5 +58,9 @@ public class Course {
     @PreUpdate
     protected void onUpdate() {
         updatedAt = LocalDateTime.now();
+    }
+
+    public int getEnrollmentCount() {
+        return this.enrollments != null ? this.enrollments.size() : 0;
     }
 }
