@@ -1,7 +1,6 @@
-// src/context/AuthContext.jsx
+// src/context/AuthContext.jsx - FIXED VERSION
 import React, { createContext, useState, useContext, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import { jwtDecode } from "jwt-decode";
 import * as authService from "../services/authService";
 
 const AuthContext = createContext();
@@ -61,10 +60,14 @@ export const AuthProvider = ({ children }) => {
       // Store in localStorage
       localStorage.setItem("token", token);
       localStorage.setItem("userData", JSON.stringify(userData));
+      localStorage.setItem("userRole", userRole); // ✅ ADDED
       
       // Update state
       setUser(userData);
 
+      // ✅ Trigger storage event for AppRoutes
+      window.dispatchEvent(new Event('storage'));
+      
       // Redirect based on role
       setTimeout(() => {
         if (userRole === "ADMIN") {
@@ -86,12 +89,34 @@ export const AuthProvider = ({ children }) => {
   const logout = () => {
     localStorage.removeItem("token");
     localStorage.removeItem("userData");
+    localStorage.removeItem("userRole"); // ✅ ADDED
     setUser(null);
-    navigate("/login", { replace: true });
+    
+    // ✅ Trigger storage event for AppRoutes
+    window.dispatchEvent(new Event('storage'));
+    
+    navigate("/", { replace: true }); // ✅ CHANGE TO HOME instead of login
   };
 
   const register = async (data) => {
-    return await authService.register(data);
+    try {
+      // ✅ STEP 1: First register the user
+      const response = await authService.register(data);
+      console.log("✅ Signup Successful:", response);
+
+      // ✅ STEP 2: Automatically login after successful registration
+      const loginResponse = await login({
+        email: data.email,
+        password: data.password
+      });
+
+      console.log("✅ Auto-login after signup:", loginResponse);
+      return loginResponse;
+
+    } catch (error) {
+      console.error("❌ Registration failed:", error);
+      throw error;
+    }
   };
 
   const value = {
