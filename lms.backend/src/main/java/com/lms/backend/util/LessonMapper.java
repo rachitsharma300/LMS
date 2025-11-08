@@ -6,7 +6,7 @@ import com.lms.backend.model.Course;
 
 public class LessonMapper {
 
-    // ✅ Lesson Entity to DTO conversion
+    // Lesson Entity to DTO conversion
     public static LessonDto toDto(Lesson lesson) {
         if (lesson == null) {
             return null;
@@ -23,7 +23,7 @@ public class LessonMapper {
                 .build();
     }
 
-    // ✅ Lesson DTO to Entity conversion (WITH Course)
+    // Lesson DTO to Entity conversion (WITH Course)
     public static Lesson toEntity(LessonDto lessonDto, Course course) {
         if (lessonDto == null) {
             return null;
@@ -40,7 +40,7 @@ public class LessonMapper {
                 .build();
     }
 
-    // ✅ Lesson DTO to Entity conversion (WITHOUT Course - for update)
+    // Lesson DTO to Entity conversion (WITHOUT Course - for update)
     public static Lesson toEntity(LessonDto lessonDto) {
         if (lessonDto == null) {
             return null;
