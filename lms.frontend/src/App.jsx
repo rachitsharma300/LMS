@@ -1,4 +1,4 @@
-// src/App.js - UPDATED WITH SMART LAYOUT
+// src/App.jsx - UPDATED
 import React from "react";
 import { BrowserRouter as Router, useLocation } from "react-router-dom";
 import { AuthProvider } from "./context/AuthContext";
@@ -10,25 +10,35 @@ import Footer from "./components/Footer";
 function AppLayout() {
   const location = useLocation();
   
-  // Define routes where Navbar & Footer should NOT show
+  // ✅ FIXED: Define routes where Navbar & Footer should NOT show
+  // Only dashboard/internal pages should hide layout
   const hideLayoutRoutes = [
     '/admin/dashboard',
     '/admin/users', 
     '/admin/courses',
     '/instructor/dashboard',
-    '/instructor/courses',
-    '/instructor/lessons',
-    '/instructor/media',
+    '/instructor/courses/',
     '/student/dashboard',
     '/student/learning',
-    '/student/enrollments',
-    '/student/progress',
-    '/student/course'
+    '/student/course/'
   ];
 
   const shouldShowLayout = !hideLayoutRoutes.some(route => 
     location.pathname.startsWith(route)
   );
+
+  // ✅ SPECIAL CASE: Always show layout for home page
+  if (location.pathname === '/') {
+    return (
+      <div className="min-h-screen flex flex-col bg-gray-50">
+        <Navbar />
+        <main className="flex-grow">
+          <AppRoutes />
+        </main>
+        <Footer />
+      </div>
+    );
+  }
 
   return (
     <div className="min-h-screen flex flex-col bg-gray-50">
