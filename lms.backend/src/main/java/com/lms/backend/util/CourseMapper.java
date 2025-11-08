@@ -3,7 +3,10 @@ package com.lms.backend.util;
 import com.lms.backend.dto.CourseDto;
 import com.lms.backend.model.Course;
 import com.lms.backend.model.User;
+import com.lms.backend.model.Category;
+import org.springframework.stereotype.Component;
 
+@Component
 public class CourseMapper {
 
     public static Course toEntity(CourseDto dto, User instructor) {
@@ -12,9 +15,7 @@ public class CourseMapper {
         course.setDescription(dto.getDescription());
         course.setCoverImageUrl(dto.getCoverImageUrl());
         course.setApproved(dto.isApproved());
-        course.setInstructor(instructor); // ✅ now it's a User object
-
-        course.setCategory(dto.getCategory());
+        course.setInstructor(instructor);
         course.setLevel(dto.getLevel());
         course.setRating(dto.getRating());
         course.setTotalStudents(dto.getTotalStudents());
@@ -31,15 +32,19 @@ public class CourseMapper {
         dto.setDescription(course.getDescription());
         dto.setCoverImageUrl(course.getCoverImageUrl());
         dto.setApproved(course.isApproved());
+        dto.setEnrollmentCount(course.getEnrollments() != null ? course.getEnrollments().size() : 0);
 
-        // ✅ Send instructorId instead of full User object
+        // Instructor info
         if (course.getInstructor() != null) {
             dto.setInstructorId(course.getInstructor().getId());
             dto.setInstructorName(course.getInstructor().getUsername());
         }
 
-
-        dto.setCategory(course.getCategory());
+        // Category info
+        if (course.getCategory() != null) {
+            dto.setCategoryId(course.getCategory().getId());
+            dto.setCategoryName(course.getCategory().getName());
+        }
         dto.setLevel(course.getLevel());
         dto.setRating(course.getRating());
         dto.setTotalStudents(course.getTotalStudents());
