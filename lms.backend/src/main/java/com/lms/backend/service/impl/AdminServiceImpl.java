@@ -1,6 +1,7 @@
 package com.lms.backend.service.impl;
 
 import com.lms.backend.controller.AdminController;
+import com.lms.backend.dto.CourseDto;
 import com.lms.backend.model.Course;
 import com.lms.backend.model.Role;
 import com.lms.backend.model.User;
@@ -8,6 +9,7 @@ import com.lms.backend.repository.CourseRepository;
 import com.lms.backend.repository.RoleRepository;
 import com.lms.backend.repository.UserRepository;
 import com.lms.backend.service.AdminService;
+import com.lms.backend.util.CourseMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -17,6 +19,7 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 @Service
 public class AdminServiceImpl implements AdminService {
@@ -68,6 +71,40 @@ public class AdminServiceImpl implements AdminService {
                 .build();
 
         return userRepository.save(user);
+    }
+
+    @Override
+    public List<CourseDto> getPendingCourses() {
+        // Return all courses that are not approved yet
+        List<Course> pendingCourses = courseRepository.findByApprovedFalse();
+        return pendingCourses.stream()
+                .map(CourseMapper::toDto)
+                .collect(Collectors.toList());
+    }
+
+    @Override
+    public CourseDto approveCourse(Long courseId) {
+        Course course = courseRepository.findById(courseId)
+                .orElseThrow(() -> new RuntimeException("Course not found"));
+
+        course.setApproved(true);
+        Course approvedCourse = courseRepository.save(course);
+
+        return CourseMapper.toDto(approvedCourse);
+    }
+
+    @Override
+    public CourseDto rejectCourse(Long courseId) {
+        Course course = courseRepository.findById(courseId)
+                .orElseThrow(() -> new RuntimeException("Course not found"));
+
+        // Option 1: Delete the course
+        courseRepository.delete(course);
+
+        // Option 2: Or just mark as rejected (if you have rejected field)
+        // course.setRejected(true);
+        // Course rejectedCourse = courseRepository.save(course);
+        return CourseMapper.toDto(course);
     }
 
     @Override
