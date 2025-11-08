@@ -1,4 +1,3 @@
-// src/components/Footer.jsx - PROFESSIONAL MINIMAL VERSION
 import React from "react";
 import { Link } from "react-router-dom";
 
@@ -9,7 +8,7 @@ export default function Footer() {
     {
       title: "Platform",
       links: [
-        { name: "Browse Courses", path: "/courses" },
+        { name: "Browse Courses", path: "/#featured-courses" },
         { name: "Instructor Dashboard", path: "/instructor/dashboard" },
         { name: "Student Dashboard", path: "/student/dashboard" },
       ]
