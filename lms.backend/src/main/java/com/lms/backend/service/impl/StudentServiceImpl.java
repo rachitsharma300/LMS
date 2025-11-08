@@ -1,10 +1,5 @@
-// StudentServiceImpl.java - FIXED VERSION
 package com.lms.backend.service.impl;
 
-// Add these imports at the top of StudentServiceImpl.java
-import com.lms.backend.repository.LessonRepository;
-import com.lms.backend.repository.LessonProgressRepository;
-import com.lms.backend.model.LessonProgress;
 import com.lms.backend.model.*;
 import com.lms.backend.repository.*;
 import com.lms.backend.service.StudentService;
@@ -34,6 +29,12 @@ public class StudentServiceImpl implements StudentService {
     private UserRepository userRepository;
 
     @Override
+    public List<Course> getCourseCatalog() {
+        // Return all approved courses
+        return courseRepository.findByApprovedTrue();
+    }
+
+    @Override
     public void enrollCourse(User student, Long courseId) {
         Course course = courseRepository.findById(courseId)
                 .orElseThrow(() -> new RuntimeException("Course not found with ID: " + courseId));
@@ -43,7 +44,6 @@ public class StudentServiceImpl implements StudentService {
             throw new RuntimeException("You are already enrolled in this course");
         }
 
-        // 🎯 FIX: Use isApproved() method (for boolean field)
         if (!course.isApproved()) {
             throw new RuntimeException("This course is not approved for enrollment");
         }
@@ -56,11 +56,28 @@ public class StudentServiceImpl implements StudentService {
                 .build();
 
         enrollmentRepository.save(enrollment);
+
+        System.out.println("Student " + student.getEmail() + " enrolled in course: " + course.getTitle());
     }
 
     @Override
     public List<Course> getEnrolledCourses(User student) {
-        return enrollmentRepository.findCoursesByStudent(student);
+        // Use findByStudent method for results
+        System.out.println("Getting enrolled courses for student: " + student.getEmail() + " (ID: " + student.getId() + ")");
+
+        List<Enrollment> enrollments = enrollmentRepository.findByStudent(student);
+        List<Course> courses = enrollments.stream()
+                .map(Enrollment::getCourse)
+                .collect(Collectors.toList());
+
+        System.out.println("📚 Found " + courses.size() + " enrolled courses for student: " + student.getEmail());
+
+        // Debug: Print course details
+        for (Course course : courses) {
+            System.out.println(" Course: " + course.getTitle() + " (ID: " + course.getId() + ")");
+        }
+
+        return courses;
     }
 
     @Override
@@ -123,7 +140,11 @@ public class StudentServiceImpl implements StudentService {
 
     @Override
     public Map<String, Object> getLearningStats(User student) {
+        System.out.println("Getting learning stats for student: " + student.getEmail() + " (ID: " + student.getId() + ")");
+
         List<Enrollment> enrollments = enrollmentRepository.findByStudent(student);
+
+        System.out.println(" Found " + enrollments.size() + " enrollments for stats calculation");
 
         long totalCourses = enrollments.size();
         long completedCourses = enrollments.stream()
@@ -133,10 +154,17 @@ public class StudentServiceImpl implements StudentService {
                 .filter(e -> e.getProgress() > 0 && e.getProgress() < 100)
                 .count();
 
-        int totalLearningHours = enrollments.stream()
-                .mapToInt(e -> (int) (e.getProgress() * 2))
-                .sum();
+        // Calculate total completed lessons
+        long totalCompletedLessons = 0;
+        for (Enrollment enrollment : enrollments) {
+            List<LessonProgress> progressList = lessonProgressRepository
+                    .findByStudentAndLesson_Course(student, enrollment.getCourse());
+            totalCompletedLessons += progressList.stream()
+                    .filter(LessonProgress::isCompleted)
+                    .count();
+        }
 
+        int totalLearningHours = (int) (totalCompletedLessons * 0.5); // Estimate 30 mins per lesson
         int learningStreak = calculateLearningStreak(student);
 
         Map<String, Object> stats = new HashMap<>();
@@ -146,6 +174,12 @@ public class StudentServiceImpl implements StudentService {
         stats.put("totalLearningHours", totalLearningHours);
         stats.put("learningStreak", learningStreak);
         stats.put("totalEnrollments", totalCourses);
+        stats.put("completedLessons", totalCompletedLessons);
+        stats.put("progressPercentage", totalCourses > 0 ?
+                enrollments.stream().mapToDouble(Enrollment::getProgress).average().orElse(0.0) : 0.0);
+        stats.put("certificates", completedCourses);
+
+        System.out.println("Stats calculated - Total courses: " + totalCourses + ", Completed: " + completedCourses);
 
         return stats;
     }
@@ -186,14 +220,17 @@ public class StudentServiceImpl implements StudentService {
 
     @Override
     public List<Course> getAvailableCourses(User student) {
-        // 🎯 FIX: Use findByApprovedTrue() instead of findByIsApprovedTrue()
         List<Course> allApprovedCourses = courseRepository.findByApprovedTrue();
         List<Course> enrolledCourses = getEnrolledCourses(student);
 
-        return allApprovedCourses.stream()
+        List<Course> availableCourses = allApprovedCourses.stream()
                 .filter(course -> enrolledCourses.stream()
                         .noneMatch(enrolled -> enrolled.getId().equals(course.getId())))
                 .collect(Collectors.toList());
+
+        System.out.println(" Available courses for " + student.getEmail() + ": " + availableCourses.size());
+
+        return availableCourses;
     }
 
     private void updateCourseProgress(User student, Course course) {
@@ -211,9 +248,11 @@ public class StudentServiceImpl implements StudentService {
 
         enrollment.setProgress(progress);
         enrollmentRepository.save(enrollment);
+
+        System.out.println("Updated progress for " + student.getEmail() + " in " + course.getTitle() + ": " + progress + "%");
     }
 
     private int calculateLearningStreak(User student) {
-        return new Random().nextInt(15) + 1;
+        return new Random().nextInt(7) + 1;
     }
 }
