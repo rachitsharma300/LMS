@@ -1,4 +1,3 @@
-// InstructorController.java - UPDATE THIS PART
 package com.lms.backend.controller;
 
 import com.lms.backend.dto.CourseDto;
@@ -6,13 +5,16 @@ import com.lms.backend.dto.LessonDto;
 import com.lms.backend.model.Course;
 import com.lms.backend.model.Lesson;
 import com.lms.backend.model.User;
+import com.lms.backend.model.Category;
+import com.lms.backend.repository.CategoryRepository;
 import com.lms.backend.service.InstructorService;
 import com.lms.backend.service.UserService;
 import com.lms.backend.util.CourseMapper;
-import com.lms.backend.util.LessonMapper; // ✅ IMPORT ADD KARE
+import com.lms.backend.util.LessonMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Map;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -27,11 +29,17 @@ public class InstructorController {
     @Autowired
     private UserService userService;
 
-    // ✅ EXISTING COURSE APIs (JO AAPKE PASS HAI)
+    @Autowired
+    private CategoryRepository categoryRepository;
+
+    // COURSE APIs
     @PostMapping("/courses")
     public CourseDto createCourse(@RequestBody CourseDto courseDto) {
         User instructor = userService.getUserById(courseDto.getInstructorId());
+        Category category = categoryRepository.findById(courseDto.getCategoryId())
+                .orElseThrow(() -> new RuntimeException("Category not found"));
         Course course = CourseMapper.toEntity(courseDto, instructor);
+        course.setCategory(category);
         Course saved = instructorService.createCourse(course, instructor.getId());
         return CourseMapper.toDto(saved);
     }
@@ -42,17 +50,24 @@ public class InstructorController {
         return courses.stream().map(CourseMapper::toDto).collect(Collectors.toList());
     }
 
+    @GetMapping("/courses/{courseId}/stats")
+    public Map<String, Object> getCourseStats(@PathVariable Long courseId) {
+        return instructorService.getCourseWithStats(courseId);
+    }
+
     @DeleteMapping("/courses/{id}")
     public String deleteCourse(@PathVariable Long id) {
         instructorService.deleteCourse(id);
         return "Course deleted successfully";
     }
 
-    // ✅ NEW APIs ADD KARE
     @PutMapping("/courses/{id}")
     public CourseDto updateCourse(@PathVariable Long id, @RequestBody CourseDto courseDto) {
         User instructor = userService.getUserById(courseDto.getInstructorId());
+        Category category = categoryRepository.findById(courseDto.getCategoryId())
+                .orElseThrow(() -> new RuntimeException("Category not found"));
         Course updatedCourse = CourseMapper.toEntity(courseDto, instructor);
+        updatedCourse.setCategory(category);
         Course saved = instructorService.updateCourse(id, updatedCourse);
         return CourseMapper.toDto(saved);
     }
@@ -63,7 +78,7 @@ public class InstructorController {
         return CourseMapper.toDto(course);
     }
 
-    // ✅ LESSON MANAGEMENT APIs (LessonMapper use kare)
+    // LESSON MANAGEMENT APIs
     @PostMapping("/courses/{courseId}/lessons")
     public LessonDto addLesson(@PathVariable Long courseId, @RequestBody LessonDto lessonDto) {
         Course course = instructorService.getCourseById(courseId);
@@ -80,7 +95,6 @@ public class InstructorController {
 
     @PutMapping("/lessons/{lessonId}")
     public LessonDto updateLesson(@PathVariable Long lessonId, @RequestBody LessonDto lessonDto) {
-        // For update, we don't need course, just update the lesson fields
         Lesson lesson = new Lesson();
         lesson.setTitle(lessonDto.getTitle());
         lesson.setContent(lessonDto.getContent());
