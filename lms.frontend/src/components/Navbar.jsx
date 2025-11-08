@@ -1,4 +1,3 @@
-// src/components/Navbar.jsx - PROFESSIONAL MINIMAL VERSION
 import React, { useState, useEffect } from "react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import { useAuth } from "../context/AuthContext";
@@ -16,7 +15,7 @@ export default function Navbar() {
 
   const handleLogout = () => {
     logout();
-    navigate('/');
+    navigate("/");
   };
 
   const isActiveRoute = (path) => location.pathname === path;
@@ -26,7 +25,6 @@ export default function Navbar() {
       <nav className="bg-white border-b border-gray-200 fixed w-full top-0 z-50">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex justify-between items-center h-16">
-            
             {/* Logo */}
             <Link to="/" className="flex items-center space-x-2">
               <div className="w-8 h-8 bg-blue-600 rounded-lg flex items-center justify-center">
@@ -37,25 +35,29 @@ export default function Navbar() {
 
             {/* Desktop Navigation */}
             <div className="hidden md:flex items-center space-x-8">
-              <Link 
-                to="/" 
+              <Link
+                to="/"
                 className={`font-medium transition-colors ${
-                  isActiveRoute('/') ? 'text-blue-600' : 'text-gray-600 hover:text-blue-600'
+                  isActiveRoute("/")
+                    ? "text-blue-600"
+                    : "text-gray-600 hover:text-blue-600"
                 }`}
               >
                 Home
               </Link>
-              <Link 
-                to="/courses" 
+              <Link
+                to="/#featured-courses"
                 className={`font-medium transition-colors ${
-                  isActiveRoute('/courses') ? 'text-blue-600' : 'text-gray-600 hover:text-blue-600'
+                  isActiveRoute("/courses")
+                    ? "text-blue-600"
+                    : "text-gray-600 hover:text-blue-600"
                 }`}
               >
                 Courses
               </Link>
-              
+
               {user && (
-                <Link 
+                <Link
                   to={`/${user.role}/dashboard`}
                   className="bg-blue-600 text-white px-4 py-2 rounded-lg font-medium hover:bg-blue-700 transition-colors"
                 >
@@ -93,14 +95,14 @@ export default function Navbar() {
                 </>
               ) : (
                 <>
-                  <Link 
-                    to="/login" 
+                  <Link
+                    to="/login"
                     className="text-gray-700 hover:text-blue-600 font-medium text-sm transition-colors"
                   >
                     Login
                   </Link>
-                  <Link 
-                    to="/signup" 
+                  <Link
+                    to="/signup"
                     className="bg-blue-600 text-white px-4 py-2 rounded-lg font-medium hover:bg-blue-700 transition-colors text-sm"
                   >
                     Sign Up
@@ -113,8 +115,22 @@ export default function Navbar() {
                 onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
                 className="md:hidden p-2 rounded-lg text-gray-600 hover:bg-gray-100"
               >
-                <svg className="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d={isMobileMenuOpen ? "M6 18L18 6M6 6l12 12" : "M4 6h16M4 12h16M4 18h16"} />
+                <svg
+                  className="w-6 h-6"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  stroke="currentColor"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth={2}
+                    d={
+                      isMobileMenuOpen
+                        ? "M6 18L18 6M6 6l12 12"
+                        : "M4 6h16M4 12h16M4 18h16"
+                    }
+                  />
                 </svg>
               </button>
             </div>
@@ -125,13 +141,19 @@ export default function Navbar() {
         {isMobileMenuOpen && (
           <div className="md:hidden bg-white border-t border-gray-200">
             <div className="px-4 py-6 space-y-4">
-              <Link to="/" className="block py-2 font-medium text-gray-700 hover:text-blue-600">
+              <Link
+                to="/"
+                className="block py-2 font-medium text-gray-700 hover:text-blue-600"
+              >
                 Home
               </Link>
-              <Link to="/courses" className="block py-2 font-medium text-gray-700 hover:text-blue-600">
+              <Link
+                to="/courses"
+                className="block py-2 font-medium text-gray-700 hover:text-blue-600"
+              >
                 Courses
               </Link>
-              
+
               {user ? (
                 <>
                   <div className="pt-4 border-t border-gray-200">
@@ -140,11 +162,15 @@ export default function Navbar() {
                         {(user.name || user.username).charAt(0).toUpperCase()}
                       </div>
                       <div>
-                        <div className="font-medium text-gray-900">{user.name || user.username}</div>
-                        <div className="text-sm text-gray-500 capitalize">{user.role}</div>
+                        <div className="font-medium text-gray-900">
+                          {user.name || user.username}
+                        </div>
+                        <div className="text-sm text-gray-500 capitalize">
+                          {user.role}
+                        </div>
                       </div>
                     </div>
-                    <Link 
+                    <Link
                       to={`/${user.role}/dashboard`}
                       className="block w-full bg-blue-600 text-white text-center py-2 rounded-lg font-medium hover:bg-blue-700 mt-3"
                     >
@@ -160,10 +186,16 @@ export default function Navbar() {
                 </>
               ) : (
                 <div className="pt-4 border-t border-gray-200 space-y-3">
-                  <Link to="/login" className="block w-full text-center py-2 text-gray-700 font-medium border border-gray-300 rounded-lg hover:bg-gray-50">
+                  <Link
+                    to="/login"
+                    className="block w-full text-center py-2 text-gray-700 font-medium border border-gray-300 rounded-lg hover:bg-gray-50"
+                  >
                     Login
                   </Link>
-                  <Link to="/signup" className="block w-full text-center py-2 bg-blue-600 text-white font-medium rounded-lg hover:bg-blue-700">
+                  <Link
+                    to="/signup"
+                    className="block w-full text-center py-2 bg-blue-600 text-white font-medium rounded-lg hover:bg-blue-700"
+                  >
                     Sign Up
                   </Link>
                 </div>
