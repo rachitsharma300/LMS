@@ -1,4 +1,4 @@
-// src/pages/student/Dashboard.jsx - PREMIUM ENHANCED VERSION
+// src/pages/student/Dashboard.jsx - FIXED VERSION
 import React, { useEffect, useState } from "react";
 import apiClient from "../../services/apiClient";
 import StudentLayout from "../../layouts/StudentLayout";
@@ -8,18 +8,41 @@ export default function Dashboard() {
   const [stats, setStats] = useState({});
   const [recentCourses, setRecentCourses] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [error, setError] = useState("");
 
   useEffect(() => {
-    Promise.all([
-      apiClient.get("/student/stats"),
-      apiClient.get("/student/my-courses?limit=3")
-    ])
-      .then(([statsRes, coursesRes]) => {
-        setStats(statsRes.data);
-        setRecentCourses(coursesRes.data);
-      })
-      .catch(err => console.error(err))
-      .finally(() => setLoading(false));
+    const fetchDashboardData = async () => {
+      try {
+        setError("");
+        
+        // ✅ FIXED: Use correct API endpoints
+        const [statsResponse, coursesResponse] = await Promise.all([
+          apiClient.get("/student/stats"),
+          apiClient.get("/student/my-courses")
+        ]);
+
+        console.log("📊 Stats API Response:", statsResponse.data);
+        console.log("📚 Courses API Response:", coursesResponse.data);
+
+        setStats(statsResponse.data || {});
+        
+        // ✅ Take only first 3 courses for "recent courses"
+        const courses = coursesResponse.data || [];
+        setRecentCourses(courses.slice(0, 3));
+
+      } catch (err) {
+        console.error("❌ Dashboard API Error:", err);
+        setError("Failed to load dashboard data");
+        
+        // ✅ Fallback empty data
+        setStats({});
+        setRecentCourses([]);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchDashboardData();
   }, []);
 
   // Enhanced Progress Circle with Animation
@@ -103,13 +126,28 @@ export default function Dashboard() {
         </p>
       </div>
 
+      {/* Error Message */}
+      {error && (
+        <div className="bg-yellow-50 border border-yellow-200 rounded-2xl p-6 mb-6">
+          <div className="flex items-center gap-3">
+            <div className="w-6 h-6 bg-yellow-100 rounded-full flex items-center justify-center">
+              <span className="text-yellow-600 text-sm">⚠️</span>
+            </div>
+            <div>
+              <p className="text-yellow-800 font-medium">{error}</p>
+              <p className="text-yellow-700 text-sm mt-1">Showing placeholder data</p>
+            </div>
+          </div>
+        </div>
+      )}
+
       {/* Enhanced Stats Grid */}
       <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-6 mb-8">
         <div className="group bg-white/80 backdrop-blur-sm rounded-3xl shadow-lg border border-gray-200/60 p-6 hover:shadow-2xl hover:scale-105 transition-all duration-500 hover:border-blue-200">
           <div className="flex items-center justify-between">
             <div>
               <p className="text-sm font-semibold text-gray-500 uppercase tracking-wide">Enrolled Courses</p>
-              <h3 className="text-3xl font-bold text-gray-900 mt-2">{stats.totalCourses || 0}</h3>
+              <h3 className="text-3xl font-bold text-gray-900 mt-2">{stats.totalCourses || recentCourses.length || 0}</h3>
               <p className="text-xs text-gray-500 mt-1">Active learning</p>
             </div>
             <div className="w-14 h-14 bg-gradient-to-br from-blue-500 to-cyan-500 rounded-2xl flex items-center justify-center shadow-lg group-hover:shadow-xl transition-shadow">
@@ -123,7 +161,7 @@ export default function Dashboard() {
             <div>
               <p className="text-sm font-semibold text-gray-500 uppercase tracking-wide">Completed Lessons</p>
               <h3 className="text-3xl font-bold text-gray-900 mt-2">{stats.completedLessons || 0}</h3>
-              <p className="text-xs text-green-600 font-medium mt-1">+5 this week</p>
+              <p className="text-xs text-green-600 font-medium mt-1">Keep learning!</p>
             </div>
             <div className="w-14 h-14 bg-gradient-to-br from-green-500 to-emerald-500 rounded-2xl flex items-center justify-center shadow-lg group-hover:shadow-xl transition-shadow">
               <span className="text-2xl text-white">✅</span>
@@ -177,7 +215,15 @@ export default function Dashboard() {
                 className="group bg-gradient-to-br from-white to-gray-50 rounded-2xl shadow-lg border border-gray-200/60 p-6 hover:shadow-2xl hover:scale-105 transition-all duration-500 hover:border-blue-200"
               >
                 <div className="w-full h-32 bg-gradient-to-br from-blue-500/20 to-purple-500/20 rounded-xl mb-4 flex items-center justify-center group-hover:from-blue-500/30 group-hover:to-purple-500/30 transition-all duration-500">
-                  <span className="text-4xl opacity-70 group-hover:opacity-100 transition-opacity">📖</span>
+                  {course.coverImageUrl ? (
+                    <img 
+                      src={course.coverImageUrl} 
+                      alt={course.title}
+                      className="w-full h-full object-cover rounded-xl"
+                    />
+                  ) : (
+                    <span className="text-4xl opacity-70 group-hover:opacity-100 transition-opacity">📖</span>
+                  )}
                 </div>
                 
                 <div className="flex items-start justify-between mb-3">
@@ -186,6 +232,10 @@ export default function Dashboard() {
                     {course.progress || 0}%
                   </span>
                 </div>
+                
+                <p className="text-gray-600 text-sm mb-3 line-clamp-2">
+                  {course.description || "Continue your learning journey"}
+                </p>
                 
                 <div className="w-full bg-gray-200 rounded-full h-2 mb-4">
                   <div 
