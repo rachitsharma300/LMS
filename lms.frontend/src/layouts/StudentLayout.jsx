@@ -16,6 +16,10 @@ export default function StudentLayout({ children }) {
     { title: "Achievements", path: "/student/achievements", icon: "🏆", desc: "Certificates & Badges" },
   ];
 
+  // ✅ FIXED: Get user data from localStorage without hardcoded fallback
+  const userData = localStorage.getItem("userData");
+  const user = userData ? JSON.parse(userData) : null;
+
   useEffect(() => {
     const handleScroll = () => {
       setScrolled(window.scrollY > 10);
@@ -26,11 +30,10 @@ export default function StudentLayout({ children }) {
 
   const handleSignOut = () => {
     localStorage.removeItem("token");
-    localStorage.removeItem("user");
+    localStorage.removeItem("userData");
+    localStorage.removeItem("userRole");
     navigate("/login");
   };
-
-  const user = JSON.parse(localStorage.getItem("user") || '{"name":"Student","email":"student@example.com"}');
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-50 via-blue-50 to-indigo-50 flex">
@@ -86,11 +89,13 @@ export default function StudentLayout({ children }) {
         <div className="p-6 border-t border-gray-200/60 bg-white/80 mt-auto">
           <div className="flex items-center gap-3 mb-4 p-3 bg-gradient-to-r from-slate-100 to-blue-50 rounded-2xl">
             <div className="w-10 h-10 bg-gradient-to-br from-green-500 to-emerald-600 rounded-xl flex items-center justify-center">
-              <span className="text-white font-bold text-sm">{user.name?.charAt(0) || 'S'}</span>
+              {/* ✅ FIXED: Use username instead of name */}
+              <span className="text-white font-bold text-sm">{user?.username?.charAt(0) || 'S'}</span>
             </div>
             <div className="flex-1 min-w-0">
-              <p className="font-semibold text-gray-800 text-sm truncate">{user.name || 'Student'}</p>
-              <p className="text-xs text-gray-500 truncate">{user.email || 'student@example.com'}</p>
+              {/* ✅ FIXED: Use username instead of name */}
+              <p className="font-semibold text-gray-800 text-sm truncate">{user?.username || 'Student'}</p>
+              <p className="text-xs text-gray-500 truncate">{user?.email || ''}</p>
             </div>
           </div>
           
@@ -120,8 +125,9 @@ export default function StudentLayout({ children }) {
                 <span className="text-xl">☰</span>
               </button>
               <div className="hidden sm:block">
+                {/* ✅ FIXED: Use username instead of name */}
                 <h1 className="text-2xl font-bold bg-gradient-to-r from-gray-800 to-gray-600 bg-clip-text text-transparent">
-                  Welcome back, {user.name || 'Student'}! 👋
+                  Welcome back, {user?.username || 'Student'}! 👋
                 </h1>
                 <p className="text-gray-600 text-sm">Ready to continue your learning journey?</p>
               </div>
@@ -135,12 +141,14 @@ export default function StudentLayout({ children }) {
               >
                 <div className="relative">
                   <div className="w-10 h-10 bg-gradient-to-br from-blue-500 to-purple-600 rounded-xl flex items-center justify-center shadow-lg group-hover:shadow-xl transition-shadow duration-300">
-                    <span className="text-white font-bold text-sm">{user.name?.charAt(0) || 'S'}</span>
+                    {/* ✅ FIXED: Use username instead of name */}
+                    <span className="text-white font-bold text-sm">{user?.username?.charAt(0) || 'S'}</span>
                   </div>
                   <div className="absolute -bottom-1 -right-1 w-3 h-3 bg-green-500 rounded-full border-2 border-white"></div>
                 </div>
                 <div className="hidden md:block text-left">
-                  <p className="font-semibold text-gray-800 text-sm">{user.name || 'Student'}</p>
+                  {/* ✅ FIXED: Use username instead of name */}
+                  <p className="font-semibold text-gray-800 text-sm">{user?.username || 'Student'}</p>
                   <p className="text-xs text-gray-500">Student</p>
                 </div>
                 <span className="text-gray-400 transition-transform duration-300">▼</span>
@@ -150,8 +158,9 @@ export default function StudentLayout({ children }) {
               {showDropdown && (
                 <div className="absolute right-0 top-14 bg-white/95 backdrop-blur-xl rounded-2xl shadow-2xl border border-gray-200/60 min-w-64 py-3 z-50 animate-in fade-in slide-in-from-top-5 duration-300">
                   <div className="px-4 py-3 border-b border-gray-200/60">
-                    <p className="font-bold text-gray-900">{user.name || 'Student'}</p>
-                    <p className="text-sm text-gray-500 truncate">{user.email || 'student@example.com'}</p>
+                    {/* ✅ FIXED: Use username instead of name */}
+                    <p className="font-bold text-gray-900">{user?.username || 'Student'}</p>
+                    <p className="text-sm text-gray-500 truncate">{user?.email || ''}</p>
                   </div>
                   
                   <Link 
