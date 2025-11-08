@@ -9,16 +9,18 @@ import java.util.Map;
 
 public interface StudentService {
 
-    // 🎯 Basic enrollment methods
+    // Enrollment methods
     void enrollCourse(User student, Long courseId);
     List<Course> getEnrolledCourses(User student);
 
-    // 🎯 Progress tracking methods
+    // Progress tracking methods
     Map<String, Object> getCourseWithProgress(User student, Long courseId);
     void markLessonCompleted(User student, Long courseId, Long lessonId);
     Map<String, Object> getLearningStats(User student);
     Map<String, Object> getCourseProgress(User student, Long courseId);
 
-    // 🎯 Course discovery methods
+    // Course discovery methods
     List<Course> getAvailableCourses(User student);
+
+    List<Course> getCourseCatalog();
 }
