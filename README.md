@@ -211,31 +211,102 @@ lms.backend/
 
 ---
 
-## 🧪 Testing
+##  Testing
 
-### ✅ Unit Test Coverage
+###  Unit Test Coverage
 | Test Class | Focus Area |
 |-----------|------------|
 | **AuthServiceTest** | User registration & authentication flows |
 | **CourseServiceTest** | Course CRUD operations & student enrollment logic |
 | **UserServiceTest** | User management + role assignment operations |
 
-### ▶️ Run Tests
+###  Run Tests
 ```bash
 ./mvnw test
 ```
 
-## Database Schema
+##  Database Schema
 
-### Key Entities Overview
-|-----------|------------|
-|**Entity**	| Important Fields |
-|**Users**	| id, username, email, password, role_id |
-|**Roles**	| id, name (ROLE_ADMIN, ROLE_INSTRUCTOR, ROLE_STUDENT) |
-|**Courses**	| id, title, description, instructor_id, approved |
-|**Lessons**	| id, title, content, course_id, media_url |
-|**Enrollments**	| id, student_id, course_id, enrolled_at |
-|**LessonProgress**	| id, enrollment_id, lesson_id, completed |
+###  Key Entities Overview
 
+| **Entity**        | **Important Fields** |
+|------------------|----------------------|
+| **Users**         | id, username, email, password, role_id |
+| **Roles**         | id, name (`ROLE_ADMIN`, `ROLE_INSTRUCTOR`, `ROLE_STUDENT`) |
+| **Courses**       | id, title, description, instructor_id, approved |
+| **Lessons**       | id, title, content, course_id, media_url |
+| **Enrollments**   | id, student_id, course_id, enrolled_at |
+| **LessonProgress** | id, enrollment_id, lesson_id, completed |
+
+
+### Installation & Setup
+
+## Prerequisites
+- Java 21
+- MySQL 8.0+
+- Maven 3.6+
+
+## Local Development Setup
+### 1) Clone Repository
+```
+git clone <your-repo-url>
+cd lms.backend
+```
+### 2) Create Database in MySQL
+```
+CREATE DATABASE lms_db;
+```
+### 3) Update application.properties
+```properties
+spring.datasource.url=jdbc:mysql://localhost:3306/lms_db
+spring.datasource.username=your_username
+spring.datasource.password=your_password
+```
+
+### 4) Run the Application
+```
+./mvnw spring-boot:run
+```
+### 5) Access the Application & API Docs
+
+| **Service** | **URL** |
+|------------|---------|
+| **Application** | http://localhost:8080 |
+| **Swagger UI** | http://localhost:8080/swagger-ui/index.html |
+| **OpenAPI JSON Spec** | http://localhost:8080/v3/api-docs |
+
+## Deployment
+### Backend (Render / Railway)
+
+- Connect GitHub repository
+- Set environment variables
+- Deploy & auto-build
+
+### Frontend (Netlify / Vercel)
+- Deploy frontend build
+- Set correct API Base URL
+
+### Required Environment Variables
+```properties
+DATABASE_URL=your_database_url
+JWT_SECRET=your_jwt_secret
+AWS_ACCESS_KEY=your_aws_key
+AWS_SECRET_KEY=your_aws_secret
+AWS_S3_BUCKET=your_bucket_name
+```
+## 📚 API Documentation
+
+| **Resource**   | **URL** |
+|----------------|---------|
+| **Swagger UI** | `/swagger-ui/index.html` |
+| **OpenAPI Spec** | `/v3/api-docs` |
+
+## 👥 Default Users (Auto-Created on First Run)
+
+| **Role**      | **Email**                     | **Password**     |
+|---------------|-------------------------------|------------------|
+| **Admin**     | admin@lms.com                 | admin123         |
+| **Instructor**| instructor@lms.com            | instructor123    |
+| **Student**   | student@lms.com               | student123       |
 
 
