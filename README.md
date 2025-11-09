@@ -226,6 +226,7 @@ lms.backend/
 ```
 
 ## Database Schema
+
 ### Key Entities Overview
 |-----------|------------|
 |**Entity**	| Important Fields |
