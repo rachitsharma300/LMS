@@ -227,6 +227,7 @@ lms.backend/
 
 ## Database Schema
 ### Key Entities Overview
+|-----------|------------|
 |**Entity**	| Important Fields |
 |**Users**	| id, username, email, password, role_id |
 |**Roles**	| id, name (ROLE_ADMIN, ROLE_INSTRUCTOR, ROLE_STUDENT) |
