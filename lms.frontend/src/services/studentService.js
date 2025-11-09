@@ -1,19 +1,18 @@
-import apiClient from './apiClient'; // Use your axios instance
+import apiClient from "./apiClient";
 
 const studentService = {
-  
   async enrollCourse(courseId) {
     const response = await apiClient.post(`/student/enroll/${courseId}`);
     return response.data;
   },
 
   async getEnrolledCourses() {
-    const response = await apiClient.get('/student/my-courses');
+    const response = await apiClient.get("/student/my-courses");
     return response.data;
   },
 
   async getAvailableCourses() {
-    const response = await apiClient.get('/student/courses/available');
+    const response = await apiClient.get("/student/courses/available");
     return response.data;
   },
 
@@ -23,14 +22,16 @@ const studentService = {
   },
 
   async markLessonCompleted(courseId, lessonId) {
-    const response = await apiClient.post(`/student/course/${courseId}/lesson/${lessonId}/complete`);
+    const response = await apiClient.post(
+      `/student/course/${courseId}/lesson/${lessonId}/complete`
+    );
     return response.data;
   },
 
   async getLearningStats() {
-    const response = await apiClient.get('/student/stats');
+    const response = await apiClient.get("/student/stats");
     return response.data;
-  }
+  },
 };
 
 export default studentService;

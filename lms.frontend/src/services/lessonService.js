@@ -1,4 +1,3 @@
-// src/services/lessonService.js
 import apiClient from "./apiClient";
 
 export const getLessonsByCourse = async (courseId) => {
@@ -7,7 +6,10 @@ export const getLessonsByCourse = async (courseId) => {
 };
 
 export const createLesson = async (courseId, lessonData) => {
-  const { data } = await apiClient.post(`/lessons/course/${courseId}`, lessonData);
+  const { data } = await apiClient.post(
+    `/lessons/course/${courseId}`,
+    lessonData
+  );
   return data;
 };
 

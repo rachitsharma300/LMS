@@ -1,4 +1,7 @@
-import { login as loginService, logout as logoutService } from "../services/authService";
+import {
+  login as loginService,
+  logout as logoutService,
+} from "../services/authService";
 
 export default function useAuth() {
   const login = async (credentials) => {

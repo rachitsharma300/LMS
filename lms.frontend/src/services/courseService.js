@@ -1,4 +1,3 @@
-// src/services/courseService.js
 import apiClient from "./apiClient";
 
 export const getAllCourses = async () => {
