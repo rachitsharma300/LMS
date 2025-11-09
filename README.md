@@ -209,6 +209,89 @@ lms.backend/
 ```
 </details>
 
+<details> <summary><strong>📁 lms.frontend</strong></summary>
+  
+```
+lms.frontend/
+
+├── node_modules/
+├── public/
+├── src/
+│ ├── assets/
+│ │ └── logo.png
+│ │
+│ ├── components/
+│ │ ├── CourseCard.jsx
+│ │ ├── Footer.jsx
+│ │ ├── Loader.jsx
+│ │ ├── Navbar.jsx
+│ │ └── PrivateRoute.jsx
+│ │
+│ ├── context/
+│ │ └── AuthContext.jsx
+│ │
+│ ├── hooks/
+│ │ └── useAuth.js
+│ │
+│ ├── layouts/
+│ │ ├── AdminLayout.jsx
+│ │ ├── InstructorLayout.jsx
+│ │ └── StudentLayout.jsx
+│ │
+│ ├── pages/
+│ │ ├── admin/
+│ │ │ ├── CourseApproval.jsx
+│ │ │ ├── Dashboard.jsx
+│ │ │ └── UserManagement.jsx
+│ │ │
+│ │ ├── auth/
+│ │ │ ├── Login.jsx
+│ │ │ └── Signup.jsx
+│ │ │
+│ │ ├── instructor/
+│ │ │ ├── AddLesson.jsx
+│ │ │ ├── CourseDetail.jsx
+│ │ │ ├── CreateCourse.jsx
+│ │ │ ├── Dashboard.jsx
+│ │ │ ├── EnrolledStudents.jsx
+│ │ │ └── MediaUpload.jsx
+│ │ │ └── MyCourses.jsx
+│ │ │
+│ │ └── student/
+│ │ ├── CourseCatalog.jsx
+│ │ ├── CourseViewer.jsx
+│ │ ├── Dashboard.jsx
+│ │ ├── MyLearning.jsx
+│ │ ├── StudentLessonView.jsx
+│ ├── Home.jsx
+│ │
+│ ├── routes/
+│ │ └── AppRoutes.jsx
+│ │
+│ ├── services/
+│ │ ├── adminService.js
+│ │ ├── apiClient.js
+│ │ ├── authService.js
+│ │ ├── courseService.js
+│ │ ├── instructorService.js
+│ │ ├── lessonService.js
+│ │ ├── StudentService.js
+│ │ └── userService.js
+│ │
+│ ├── styles/
+│ │ ├── globals.css
+│ │ └── tailwind.css
+│ │
+│ ├── App.css
+│ ├── App.jsx
+│ ├── index.css
+│ ├── main.jsx
+│ └── NotFound.jsx
+│
+└── package.json
+```
+</details>
+
 ---
 
 ##  Testing
@@ -220,7 +303,9 @@ lms.backend/
 | **CourseServiceTest** | Course CRUD operations & student enrollment logic |
 | **UserServiceTest** | User management + role assignment operations |
 
+
 ###  Run Tests
+
 ```bash
 ./mvnw test
 ```
