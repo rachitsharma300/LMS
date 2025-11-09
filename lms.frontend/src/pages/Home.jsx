@@ -1,4 +1,3 @@
-// src/pages/student/Home.jsx - ENHANCED WITH DUMMY COURSES
 import React, { useState, useEffect } from "react";
 import { Link, useNavigate, useLocation } from "react-router-dom";
 import Navbar from "../components/Navbar";
@@ -13,11 +12,11 @@ export default function Home() {
   const location = useLocation();
 
   useEffect(() => {
-    if (location.hash === '#featured-courses') {
+    if (location.hash === "#featured-courses") {
       setTimeout(() => {
-        const element = document.getElementById('featured-courses');
+        const element = document.getElementById("featured-courses");
         if (element) {
-          element.scrollIntoView({ behavior: 'smooth' });
+          element.scrollIntoView({ behavior: "smooth" });
         }
       }, 100);
     }
@@ -28,7 +27,7 @@ export default function Home() {
     const loadDummyCourses = () => {
       try {
         setLoading(true);
-        
+
         const dummyCourses = [
           {
             id: 1,
@@ -40,11 +39,13 @@ export default function Home() {
             totalStudents: 3247,
             category: "Full Stack",
             approved: true,
-            coverImageUrl: "https://images.unsplash.com/photo-1555066931-4365d14bab8c?w=400&h=250&fit=crop",
-            description: "Master Java, Spring Boot, React, and MongoDB to become a full-stack developer. Build real-world projects and learn industry best practices.",
+            coverImageUrl:
+              "https://images.unsplash.com/photo-1555066931-4365d14bab8c?w=400&h=250&fit=crop",
+            description:
+              "Master Java, Spring Boot, React, and MongoDB to become a full-stack developer. Build real-world projects and learn industry best practices.",
             duration: "12 weeks",
             level: "Advanced",
-            features: ["Live Projects", "Placement Assistance", "Certificate"]
+            features: ["Live Projects", "Placement Assistance", "Certificate"],
           },
           {
             id: 2,
@@ -56,11 +57,13 @@ export default function Home() {
             totalStudents: 1895,
             category: "Development Tools",
             approved: true,
-            coverImageUrl: "https://images.unsplash.com/photo-1618401471353-b98afee0b2eb?w=400&h=250&fit=crop",
-            description: "Complete guide to version control with Git and collaboration with GitHub. Learn branching, merging, pull requests and open source contributions.",
+            coverImageUrl:
+              "https://images.unsplash.com/photo-1618401471353-b98afee0b2eb?w=400&h=250&fit=crop",
+            description:
+              "Complete guide to version control with Git and collaboration with GitHub. Learn branching, merging, pull requests and open source contributions.",
             duration: "6 weeks",
             level: "Beginner",
-            features: ["Hands-on Labs", "Real Projects", "Lifetime Access"]
+            features: ["Hands-on Labs", "Real Projects", "Lifetime Access"],
           },
           {
             id: 3,
@@ -72,11 +75,13 @@ export default function Home() {
             totalStudents: 2876,
             category: "Full Stack",
             approved: true,
-            coverImageUrl: "https://images.unsplash.com/photo-1627398242454-45a1465c2479?w=400&h=250&fit=crop",
-            description: "Build modern web applications with MongoDB, Express.js, React, and Node.js. Full-stack development with latest technologies.",
+            coverImageUrl:
+              "https://images.unsplash.com/photo-1627398242454-45a1465c2479?w=400&h=250&fit=crop",
+            description:
+              "Build modern web applications with MongoDB, Express.js, React, and Node.js. Full-stack development with latest technologies.",
             duration: "14 weeks",
             level: "Intermediate",
-            features: ["6 Projects", "Mentorship", "Job Ready"]
+            features: ["6 Projects", "Mentorship", "Job Ready"],
           },
           {
             id: 4,
@@ -88,11 +93,13 @@ export default function Home() {
             totalStudents: 2156,
             category: "Data Science",
             approved: true,
-            coverImageUrl: "https://images.unsplash.com/photo-1526379879527-8559ecfcaec0?w=400&h=250&fit=crop",
-            description: "Learn data analysis, machine learning, and visualization with Python. Pandas, NumPy, Matplotlib, and Scikit-learn.",
+            coverImageUrl:
+              "https://images.unsplash.com/photo-1526379879527-8559ecfcaec0?w=400&h=250&fit=crop",
+            description:
+              "Learn data analysis, machine learning, and visualization with Python. Pandas, NumPy, Matplotlib, and Scikit-learn.",
             duration: "10 weeks",
             level: "Intermediate",
-            features: ["Real Datasets", "ML Projects", "Industry Cases"]
+            features: ["Real Datasets", "ML Projects", "Industry Cases"],
           },
           {
             id: 5,
@@ -104,11 +111,17 @@ export default function Home() {
             totalStudents: 1789,
             category: "Mobile Development",
             approved: true,
-            coverImageUrl: "https://images.unsplash.com/photo-1512941937669-90a1b58e7e9c?w=400&h=250&fit=crop",
-            description: "Build cross-platform mobile apps for iOS and Android using React Native. Learn state management, navigation, and deployment.",
+            coverImageUrl:
+              "https://images.unsplash.com/photo-1512941937669-90a1b58e7e9c?w=400&h=250&fit=crop",
+            description:
+              "Build cross-platform mobile apps for iOS and Android using React Native. Learn state management, navigation, and deployment.",
             duration: "8 weeks",
             level: "Intermediate",
-            features: ["2 Complete Apps", "App Store Deployment", "UI/UX Design"]
+            features: [
+              "2 Complete Apps",
+              "App Store Deployment",
+              "UI/UX Design",
+            ],
           },
           {
             id: 6,
@@ -120,11 +133,13 @@ export default function Home() {
             totalStudents: 3421,
             category: "Cloud Computing",
             approved: true,
-            coverImageUrl: "https://images.unsplash.com/photo-1451187580459-43490279c0fa?w=400&h=250&fit=crop",
-            description: "Master AWS fundamentals and prepare for certification. EC2, S3, RDS, Lambda, and more with hands-on labs.",
+            coverImageUrl:
+              "https://images.unsplash.com/photo-1451187580459-43490279c0fa?w=400&h=250&fit=crop",
+            description:
+              "Master AWS fundamentals and prepare for certification. EC2, S3, RDS, Lambda, and more with hands-on labs.",
             duration: "8 weeks",
             level: "Beginner",
-            features: ["AWS Certification", "Hands-on Labs", "Exam Prep"]
+            features: ["AWS Certification", "Hands-on Labs", "Exam Prep"],
           },
           {
             id: 7,
@@ -136,11 +151,13 @@ export default function Home() {
             totalStudents: 1567,
             category: "Design",
             approved: true,
-            coverImageUrl: "https://images.unsplash.com/photo-1561070791-2526d30994b5?w=400&h=250&fit=crop",
-            description: "Learn user-centered design principles, wireframing, prototyping, and design tools like Figma and Adobe XD.",
+            coverImageUrl:
+              "https://images.unsplash.com/photo-1561070791-2526d30994b5?w=400&h=250&fit=crop",
+            description:
+              "Learn user-centered design principles, wireframing, prototyping, and design tools like Figma and Adobe XD.",
             duration: "6 weeks",
             level: "Beginner",
-            features: ["Design Portfolio", "Figma Mastery", "User Research"]
+            features: ["Design Portfolio", "Figma Mastery", "User Research"],
           },
           {
             id: 8,
@@ -152,11 +169,17 @@ export default function Home() {
             totalStudents: 1987,
             category: "DevOps",
             approved: true,
-            coverImageUrl: "https://images.unsplash.com/photo-1627398242454-45a1465c2479?w=400&h=250&fit=crop",
-            description: "Containerization with Docker, orchestration with Kubernetes, CI/CD pipelines, and infrastructure as code.",
+            coverImageUrl:
+              "https://images.unsplash.com/photo-1627398242454-45a1465c2479?w=400&h=250&fit=crop",
+            description:
+              "Containerization with Docker, orchestration with Kubernetes, CI/CD pipelines, and infrastructure as code.",
             duration: "10 weeks",
             level: "Advanced",
-            features: ["Real Projects", "CI/CD Pipelines", "Production Deployment"]
+            features: [
+              "Real Projects",
+              "CI/CD Pipelines",
+              "Production Deployment",
+            ],
           },
           {
             id: 9,
@@ -168,11 +191,13 @@ export default function Home() {
             totalStudents: 2678,
             category: "AI/ML",
             approved: true,
-            coverImageUrl: "https://images.unsplash.com/photo-1555949963-aa79dcee981c?w=400&h=250&fit=crop",
-            description: "Comprehensive machine learning course covering algorithms, neural networks, deep learning, and real-world applications.",
+            coverImageUrl:
+              "https://images.unsplash.com/photo-1555949963-aa79dcee981c?w=400&h=250&fit=crop",
+            description:
+              "Comprehensive machine learning course covering algorithms, neural networks, deep learning, and real-world applications.",
             duration: "12 weeks",
             level: "Advanced",
-            features: ["ML Projects", "TensorFlow/PyTorch", "Model Deployment"]
+            features: ["ML Projects", "TensorFlow/PyTorch", "Model Deployment"],
           },
           {
             id: 10,
@@ -184,11 +209,17 @@ export default function Home() {
             totalStudents: 1890,
             category: "Mobile Development",
             approved: true,
-            coverImageUrl: "https://images.unsplash.com/photo-1551650975-87deedd944c3?w=400&h=250&fit=crop",
-            description: "Build beautiful native apps for iOS and Android with single codebase using Flutter and Dart programming.",
+            coverImageUrl:
+              "https://images.unsplash.com/photo-1551650975-87deedd944c3?w=400&h=250&fit=crop",
+            description:
+              "Build beautiful native apps for iOS and Android with single codebase using Flutter and Dart programming.",
             duration: "9 weeks",
             level: "Intermediate",
-            features: ["3 Complete Apps", "Firebase Integration", "State Management"]
+            features: [
+              "3 Complete Apps",
+              "Firebase Integration",
+              "State Management",
+            ],
           },
           {
             id: 11,
@@ -200,17 +231,22 @@ export default function Home() {
             totalStudents: 2345,
             category: "Security",
             approved: true,
-            coverImageUrl: "https://images.unsplash.com/photo-1550751827-4bd374c3f58b?w=400&h=250&fit=crop",
-            description: "Learn ethical hacking, network security, cryptography, and security best practices to protect digital assets.",
+            coverImageUrl:
+              "https://images.unsplash.com/photo-1550751827-4bd374c3f58b?w=400&h=250&fit=crop",
+            description:
+              "Learn ethical hacking, network security, cryptography, and security best practices to protect digital assets.",
             duration: "10 weeks",
             level: "Intermediate",
-            features: ["Hands-on Labs", "Security Tools", "Vulnerability Assessment"]
-          }
+            features: [
+              "Hands-on Labs",
+              "Security Tools",
+              "Vulnerability Assessment",
+            ],
+          },
         ];
 
         setCourses(dummyCourses);
         setFeaturedCourses(dummyCourses.slice(0, 9)); // Show 9 featured courses
-        
       } catch (error) {
         console.error("Error loading courses:", error);
         setCourses([]);
@@ -238,7 +274,7 @@ export default function Home() {
   // ✅ Render rating stars
   const renderRating = (rating) => {
     if (!rating || rating === 0) return null;
-    
+
     return (
       <div className="flex items-center gap-1">
         {[1, 2, 3, 4, 5].map((star) => (
@@ -263,11 +299,11 @@ export default function Home() {
     if (currentUser) {
       navigate(`/course/${courseId}`);
     } else {
-      navigate('/login', { 
-        state: { 
+      navigate("/login", {
+        state: {
           from: `/course/${courseId}`,
-          message: "Please login to enroll in this course"
-        } 
+          message: "Please login to enroll in this course",
+        },
       });
     }
   };
@@ -301,16 +337,17 @@ export default function Home() {
             <span>🎯</span>
             <span>Learn from industry experts</span>
           </div>
-          
+
           <h1 className="text-4xl sm:text-6xl font-bold text-gray-900 mb-6 leading-tight">
             Advance Your Career With
             <span className="text-blue-600 block bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">
               Expert-Led Courses
             </span>
           </h1>
-          
+
           <p className="text-xl text-gray-600 mb-8 max-w-2xl mx-auto leading-relaxed">
-            Master in-demand skills with our curated collection of professional courses taught by industry leaders.
+            Master in-demand skills with our curated collection of professional
+            courses taught by industry leaders.
           </p>
 
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
@@ -343,7 +380,10 @@ export default function Home() {
       </section>
 
       {/* Featured Courses Section */}
-      <section id="featured-courses" className="py-16 px-4 sm:px-6 lg:px-8 bg-gray-50">
+      <section
+        id="featured-courses"
+        className="py-16 px-4 sm:px-6 lg:px-8 bg-gray-50"
+      >
         <div className="max-w-7xl mx-auto">
           <div className="text-center mb-12">
             <h2 className="text-4xl font-bold text-gray-900 mb-4">
@@ -380,12 +420,15 @@ export default function Home() {
                   {course.originalPrice > course.price && (
                     <div className="absolute bottom-4 left-4">
                       <span className="bg-red-500 text-white px-2 py-1 rounded text-xs font-medium">
-                        {Math.round((1 - course.price/course.originalPrice) * 100)}% OFF
+                        {Math.round(
+                          (1 - course.price / course.originalPrice) * 100
+                        )}
+                        % OFF
                       </span>
                     </div>
                   )}
                 </div>
-                
+
                 <div className="p-6">
                   <h3 className="text-xl font-bold text-gray-900 mb-2 line-clamp-2 group-hover:text-blue-600 transition-colors">
                     {course.title}
@@ -396,7 +439,7 @@ export default function Home() {
                     </span>
                     {course.instructorName}
                   </p>
-                  
+
                   <p className="text-gray-600 text-sm mb-4 line-clamp-2">
                     {course.description}
                   </p>
@@ -445,8 +488,7 @@ export default function Home() {
                 to="/courses"
                 className="inline-flex items-center gap-2 text-blue-600 font-semibold hover:text-blue-700 text-lg border-2 border-blue-600 px-8 py-3 rounded-xl hover:bg-blue-600 hover:text-white transition-all duration-300"
               >
-                View All Courses ({courses.length})
-                <span>→</span>
+                View All Courses ({courses.length})<span>→</span>
               </Link>
             </div>
           )}
@@ -458,33 +500,25 @@ export default function Home() {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="grid grid-cols-2 lg:grid-cols-4 gap-8 text-center">
             <div>
-              <div className="text-4xl font-bold mb-2">
-                {courses.length}+
-              </div>
+              <div className="text-4xl font-bold mb-2">{courses.length}+</div>
               <div className="text-blue-100 text-sm font-medium">
                 Quality Courses
               </div>
             </div>
             <div>
-              <div className="text-4xl font-bold mb-2">
-                25K+
-              </div>
+              <div className="text-4xl font-bold mb-2">25K+</div>
               <div className="text-blue-100 text-sm font-medium">
                 Happy Students
               </div>
             </div>
             <div>
-              <div className="text-4xl font-bold mb-2">
-                50+
-              </div>
+              <div className="text-4xl font-bold mb-2">50+</div>
               <div className="text-blue-100 text-sm font-medium">
                 Expert Instructors
               </div>
             </div>
             <div>
-              <div className="text-4xl font-bold mb-2">
-                94%
-              </div>
+              <div className="text-4xl font-bold mb-2">94%</div>
               <div className="text-blue-100 text-sm font-medium">
                 Success Rate
               </div>
@@ -501,7 +535,8 @@ export default function Home() {
               Why Learn With Us?
             </h2>
             <p className="text-gray-600 text-lg max-w-2xl mx-auto">
-              We provide the best learning experience to help you achieve your career goals
+              We provide the best learning experience to help you achieve your
+              career goals
             </p>
           </div>
 
@@ -510,33 +545,39 @@ export default function Home() {
               {
                 icon: "🎯",
                 title: "Expert Instructors",
-                description: "Learn from industry professionals with years of real-world experience"
+                description:
+                  "Learn from industry professionals with years of real-world experience",
               },
               {
-                icon: "📚", 
+                icon: "📚",
                 title: "Quality Content",
-                description: "Well-structured courses with hands-on projects and practical exercises"
+                description:
+                  "Well-structured courses with hands-on projects and practical exercises",
               },
               {
                 icon: "💼",
                 title: "Career Focused",
-                description: "Skills that are in high demand in today's competitive job market"
+                description:
+                  "Skills that are in high demand in today's competitive job market",
               },
               {
                 icon: "🔄",
                 title: "Lifetime Access",
-                description: "Once enrolled, get lifetime access to course materials and updates"
+                description:
+                  "Once enrolled, get lifetime access to course materials and updates",
               },
               {
                 icon: "🏆",
                 title: "Certification",
-                description: "Get recognized certificates to showcase your skills to employers"
+                description:
+                  "Get recognized certificates to showcase your skills to employers",
               },
               {
                 icon: "💬",
                 title: "Community Support",
-                description: "Join our community of learners and get support from peers and mentors"
-              }
+                description:
+                  "Join our community of learners and get support from peers and mentors",
+              },
             ].map((feature, index) => (
               <div
                 key={index}
@@ -562,7 +603,8 @@ export default function Home() {
             Ready to Transform Your Career?
           </h2>
           <p className="text-blue-100 text-lg mb-8 max-w-2xl mx-auto">
-            Join thousands of students who have advanced their careers with our expert-led courses
+            Join thousands of students who have advanced their careers with our
+            expert-led courses
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
             <Link
