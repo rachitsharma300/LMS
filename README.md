@@ -116,3 +116,96 @@ A full-featured **Learning Management System** built with **Spring Boot** that s
 
 ---
 
+
+<details> <summary><strong>📁 Patna Metro Backend</strong></summary>
+  
+```
+lms.backend/
+├── .idea/
+├── .mvn/
+├── mvnw
+├── mvnw.cmd
+├── pom.xml
+├── README.md
+├── HELP.md
+├── uploads/
+├── src/
+│   ├── main/
+│   │   ├── java/
+│   │   │   └── com/
+│   │   │       └── lms/
+│   │   │           └── backend/
+│   │   │               ├── LmsBackendApplication.java
+│   │   │               ├── config/
+│   │   │               │   ├── DataSeeder.java
+│   │   │               │   └── S3Config.java
+│   │   │               ├── controller/
+│   │   │               │   ├── AdminController.java
+│   │   │               │   ├── AuthController.java
+│   │   │               │   ├── CourseController.java
+│   │   │               │   ├── InstructorController.java
+│   │   │               │   ├── LessonController.java
+│   │   │               │   ├── MediaController.java
+│   │   │               │   └── StudentController.java
+│   │   │               ├── dto/
+│   │   │               │   ├── CourseDto.java
+│   │   │               │   ├── LessonDto.java
+│   │   │               │   ├── LoginRequest.java
+│   │   │               │   └── SignupRequest.java
+│   │   │               ├── exception/
+│   │   │               │   ├── GlobalExceptionHandler.java
+│   │   │               │   └── ResourceNotFoundException.java
+│   │   │               ├── model/
+│   │   │               │   ├── Category.java
+│   │   │               │   ├── Course.java
+│   │   │               │   ├── Enrollment.java
+│   │   │               │   ├── Lesson.java
+│   │   │               │   ├── LessonProgress.java
+│   │   │               │   ├── Role.java
+│   │   │               │   └── User.java
+│   │   │               ├── repository/
+│   │   │               │   ├── CategoryRepository.java
+│   │   │               │   ├── CourseRepository.java
+│   │   │               │   ├── EnrollmentRepository.java
+│   │   │               │   ├── LessonProgressRepository.java
+│   │   │               │   ├── LessonRepository.java
+│   │   │               │   ├── RoleRepository.java
+│   │   │               │   └── UserRepository.java
+│   │   │               ├── security/
+│   │   │               │   ├── CustomUserDetailsService.java
+│   │   │               │   ├── JwtAuthenticationEntryPoint.java
+│   │   │               │   ├── JwtAuthenticationFilter.java
+│   │   │               │   ├── JwtTokenProvider.java
+│   │   │               │   └── SecurityConfig.java
+│   │   │               ├── service/
+│   │   │               │   ├── AdminService.java
+│   │   │               │   ├── AuthService.java
+│   │   │               │   ├── CourseService.java
+│   │   │               │   ├── InstructorService.java
+│   │   │               │   ├── LessonService.java
+│   │   │               │   ├── MediaStorageService.java
+│   │   │               │   ├── StudentService.java
+│   │   │               │   └── UserService.java
+│   │   │               └── service/impl/
+│   │   │                   ├── AdminServiceImpl.java
+│   │   │                   ├── AuthServiceImpl.java
+│   │   │                   ├── CourseServiceImpl.java
+│   │   │                   ├── InstructorServiceImpl.java
+│   │   │                   ├── LessonServiceImpl.java
+│   │   │                   ├── StudentServiceImpl.java
+│   │   │                   └── UserServiceImpl.java
+│   │   └── resources/
+│   │       ├── application.properties
+│   │       ├── static/
+│   │       └── templates/
+│   └── test/
+│       └── java/
+│           └── com/
+│               └── lms/
+│                   └── backend/
+│                       └── LmsBackendApplicationTests.java
+└── target/
+
+```
+</details>
+
