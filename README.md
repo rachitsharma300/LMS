@@ -223,16 +223,17 @@ lms.backend/
 ### ▶️ Run Tests
 ```bash
 ./mvnw test
+```
 
-📊 Database Schema
-🗂 Key Entities Overview
-Entity	Important Fields
-Users	id, username, email, password, role_id
-Roles	id, name (ROLE_ADMIN, ROLE_INSTRUCTOR, ROLE_STUDENT)
-Courses	id, title, description, instructor_id, approved
-Lessons	id, title, content, course_id, media_url
-Enrollments	id, student_id, course_id, enrolled_at
-LessonProgress	id, enrollment_id, lesson_id, completed
+## Database Schema
+### Key Entities Overview
+|**Entity**	| Important Fields |
+|**Users**	| id, username, email, password, role_id |
+|**Roles**	| id, name (ROLE_ADMIN, ROLE_INSTRUCTOR, ROLE_STUDENT) |
+|**Courses**	| id, title, description, instructor_id, approved |
+|**Lessons**	| id, title, content, course_id, media_url |
+|**Enrollments**	| id, student_id, course_id, enrolled_at |
+|**LessonProgress**	| id, enrollment_id, lesson_id, completed |
 
 
 
