@@ -117,7 +117,7 @@ A full-featured **Learning Management System** built with **Spring Boot** that s
 ---
 
 
-<details> <summary><strong>📁 Patna Metro Backend</strong></summary>
+<details> <summary><strong>📁 lms.backend</strong></summary>
   
 ```
 lms.backend/
@@ -208,4 +208,31 @@ lms.backend/
 
 ```
 </details>
+
+---
+
+## 🧪 Testing
+
+### ✅ Unit Test Coverage
+| Test Class | Focus Area |
+|-----------|------------|
+| **AuthServiceTest** | User registration & authentication flows |
+| **CourseServiceTest** | Course CRUD operations & student enrollment logic |
+| **UserServiceTest** | User management + role assignment operations |
+
+### ▶️ Run Tests
+```bash
+./mvnw test
+
+📊 Database Schema
+🗂 Key Entities Overview
+Entity	Important Fields
+Users	id, username, email, password, role_id
+Roles	id, name (ROLE_ADMIN, ROLE_INSTRUCTOR, ROLE_STUDENT)
+Courses	id, title, description, instructor_id, approved
+Lessons	id, title, content, course_id, media_url
+Enrollments	id, student_id, course_id, enrolled_at
+LessonProgress	id, enrollment_id, lesson_id, completed
+
+
 
