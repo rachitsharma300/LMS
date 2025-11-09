@@ -1,64 +1,61 @@
 package com.lms.backend.service;
 
+import com.amazonaws.services.s3.AmazonS3;
+import com.amazonaws.services.s3.model.CannedAccessControlList;
+import com.amazonaws.services.s3.model.ObjectMetadata;
+import com.amazonaws.services.s3.model.PutObjectRequest;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
+
 import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.util.UUID;
 
 @Service
 public class MediaStorageService {
 
-    // ✅ TEMPORARY FILE STORAGE - Later replace with AWS S3/Firebase
-    private final Path fileStorageLocation = Paths.get("uploads").toAbsolutePath().normalize();
+    @Autowired
+    private AmazonS3 s3Client;
 
-    public MediaStorageService() {
-        try {
-            Files.createDirectories(this.fileStorageLocation);
-        } catch (Exception ex) {
-            throw new RuntimeException("Could not create upload directory", ex);
-        }
-    }
+    @Value("${aws.s3.bucket-name}")
+    private String bucketName;
 
-    // ✅ UPLOAD FILE TO LOCAL STORAGE
+    // ✅ UPLOAD FILE TO AWS S3
     public String uploadFile(MultipartFile file, Long courseId) {
         try {
             // Generate unique filename
-            String fileName = UUID.randomUUID().toString() + "_" + file.getOriginalFilename();
+            String fileName = "course_" + courseId + "/" +
+                    UUID.randomUUID().toString() + "_" + file.getOriginalFilename();
 
-            // Create course-specific directory
-            Path courseDirectory = this.fileStorageLocation.resolve("course_" + courseId);
-            Files.createDirectories(courseDirectory);
+            // Upload to S3
+            ObjectMetadata metadata = new ObjectMetadata();
+            metadata.setContentType(file.getContentType());
+            metadata.setContentLength(file.getSize());
 
-            // Save file
-            Path targetLocation = courseDirectory.resolve(fileName);
-            Files.copy(file.getInputStream(), targetLocation);
+            s3Client.putObject(new PutObjectRequest(
+                    bucketName,
+                    fileName,
+                    file.getInputStream(),
+                    metadata
+            ).withCannedAcl(CannedAccessControlList.PublicRead));
 
-            // Return file URL (in production, return cloud storage URL)
-            return "/uploads/course_" + courseId + "/" + fileName;
+            // Return public URL
+            return s3Client.getUrl(bucketName, fileName).toString();
 
         } catch (IOException ex) {
-            throw new RuntimeException("Could not store file", ex);
+            throw new RuntimeException("S3 upload failed: " + ex.getMessage(), ex);
         }
     }
 
-    // ✅ DELETE FILE
+    // ✅ DELETE FILE FROM AWS S3
     public void deleteFile(String fileUrl) {
         try {
-            // Extract filename from URL
-            String fileName = fileUrl.substring(fileUrl.lastIndexOf("/") + 1);
-            Path filePath = this.fileStorageLocation.resolve(fileName).normalize();
-
-            Files.deleteIfExists(filePath);
-        } catch (IOException ex) {
-            throw new RuntimeException("Could not delete file", ex);
+            // Extract file key from URL
+            String fileKey = fileUrl.substring(fileUrl.lastIndexOf("/course_") + 1);
+            s3Client.deleteObject(bucketName, fileKey);
+        } catch (Exception ex) {
+            throw new RuntimeException("S3 delete failed: " + ex.getMessage(), ex);
         }
-    }
-
-    // ✅ GET FILE EXTENSION
-    private String getFileExtension(String fileName) {
-        return fileName.substring(fileName.lastIndexOf(".") + 1);
     }
 }

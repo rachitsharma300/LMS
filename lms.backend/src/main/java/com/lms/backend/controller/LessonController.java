@@ -82,4 +82,15 @@ public class LessonController {
             return ResponseEntity.notFound().build();
         }
     }
+
+    // Get all lessons for a course
+    @GetMapping("/{courseId}/lessons")
+    public ResponseEntity<List<Lesson>> getLessonsByCourseId(@PathVariable Long courseId) {
+        try {
+            List<Lesson> lessons = lessonService.getLessonsByCourseId(courseId);
+            return ResponseEntity.ok(lessons);
+        } catch (Exception e) {
+            return ResponseEntity.status(500).build();
+        }
+    }
 }

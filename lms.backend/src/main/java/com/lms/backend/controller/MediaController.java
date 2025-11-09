@@ -1,6 +1,7 @@
 package com.lms.backend.controller;
 
 import com.lms.backend.service.MediaStorageService;
+import com.lms.backend.service.LessonService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -17,19 +18,26 @@ public class MediaController {
     @Autowired
     private MediaStorageService mediaStorageService;
 
-    // ✅ UPLOAD MEDIA FILE
+    @Autowired
+    private LessonService lessonService;
+
+    //  UPLOAD MEDIA FILE
     @PostMapping("/upload")
     public ResponseEntity<Map<String, String>> uploadMedia(
             @RequestParam("file") MultipartFile file,
-            @RequestParam("courseId") Long courseId) {
+            @RequestParam("courseId") Long courseId,
+            @RequestParam("lessonId") Long lessonId) {  // Lesson ID
+
         try {
             // Validate file
             if (file.isEmpty()) {
                 return ResponseEntity.badRequest().body(Map.of("error", "File is empty"));
             }
-
-            // Upload file to storage service
+            // Upload file to S3
             String fileUrl = mediaStorageService.uploadFile(file, courseId);
+
+            // Update lesson's media_url in database
+            lessonService.updateLessonMediaUrl(lessonId, fileUrl);
 
             Map<String, String> response = new HashMap<>();
             response.put("message", "File uploaded successfully");
