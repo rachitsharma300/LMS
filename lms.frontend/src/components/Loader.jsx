@@ -1,19 +1,44 @@
 import React from "react";
 
-export default function Loader({ 
-  size = "md", 
-  text = "Loading...", 
+export default function Loader({
+  size = "md",
+  text = "Loading...",
   variant = "spinner",
   fullScreen = false,
-  overlay = false 
+  overlay = false,
 }) {
   // Size configurations for different variants
   const sizeConfig = {
-    xs: { spinner: "w-4 h-4", dots: "w-1 h-1 mx-0.5", bar: "h-1", text: "text-xs" },
-    sm: { spinner: "w-6 h-6", dots: "w-1.5 h-1.5 mx-0.5", bar: "h-1.5", text: "text-sm" },
-    md: { spinner: "w-8 h-8", dots: "w-2 h-2 mx-1", bar: "h-2", text: "text-base" },
-    lg: { spinner: "w-12 h-12", dots: "w-3 h-3 mx-1", bar: "h-3", text: "text-lg" },
-    xl: { spinner: "w-16 h-16", dots: "w-4 h-4 mx-1.5", bar: "h-4", text: "text-xl" }
+    xs: {
+      spinner: "w-4 h-4",
+      dots: "w-1 h-1 mx-0.5",
+      bar: "h-1",
+      text: "text-xs",
+    },
+    sm: {
+      spinner: "w-6 h-6",
+      dots: "w-1.5 h-1.5 mx-0.5",
+      bar: "h-1.5",
+      text: "text-sm",
+    },
+    md: {
+      spinner: "w-8 h-8",
+      dots: "w-2 h-2 mx-1",
+      bar: "h-2",
+      text: "text-base",
+    },
+    lg: {
+      spinner: "w-12 h-12",
+      dots: "w-3 h-3 mx-1",
+      bar: "h-3",
+      text: "text-lg",
+    },
+    xl: {
+      spinner: "w-16 h-16",
+      dots: "w-4 h-4 mx-1.5",
+      bar: "h-4",
+      text: "text-xl",
+    },
   };
 
   // Color variants
@@ -23,12 +48,12 @@ export default function Loader({
     gray: "border-gray-400",
     success: "border-green-500",
     warning: "border-yellow-500",
-    danger: "border-red-500"
+    danger: "border-red-500",
   };
 
   // Spinner Loader - Classic rotating spinner
   const SpinnerLoader = () => (
-    <div 
+    <div
       className={`
         animate-spin rounded-full border-4 border-t-transparent 
         ${colorConfig.primary} 
@@ -41,7 +66,11 @@ export default function Loader({
 
   // Dots Loader - Bouncing dots animation
   const DotsLoader = () => (
-    <div className="flex items-center justify-center" role="status" aria-label="loading">
+    <div
+      className="flex items-center justify-center"
+      role="status"
+      aria-label="loading"
+    >
       {[0, 1, 2].map((dot) => (
         <div
           key={dot}
@@ -51,7 +80,7 @@ export default function Loader({
           `}
           style={{
             animationDelay: `${dot * 0.15}s`,
-            animationDuration: '0.6s'
+            animationDuration: "0.6s",
           }}
         />
       ))}
@@ -60,7 +89,7 @@ export default function Loader({
 
   // Pulse Loader - Pulsing circle
   const PulseLoader = () => (
-    <div 
+    <div
       className={`
         rounded-full bg-indigo-500 animate-pulse
         ${sizeConfig[size].spinner}
@@ -72,7 +101,7 @@ export default function Loader({
 
   // Bar Loader - Progress bar style
   const BarLoader = () => (
-    <div 
+    <div
       className={`
         w-32 bg-gray-200 rounded-full overflow-hidden
         ${sizeConfig[size].bar}
@@ -80,10 +109,10 @@ export default function Loader({
       role="status"
       aria-label="loading"
     >
-      <div 
+      <div
         className="h-full bg-indigo-500 rounded-full animate-progress"
         style={{
-          animation: 'progress 1.5s ease-in-out infinite'
+          animation: "progress 1.5s ease-in-out infinite",
         }}
       />
     </div>
@@ -91,7 +120,11 @@ export default function Loader({
 
   // Skeleton Loader - For content placeholders
   const SkeletonLoader = () => (
-    <div className="flex items-center space-x-4 animate-pulse" role="status" aria-label="loading">
+    <div
+      className="flex items-center space-x-4 animate-pulse"
+      role="status"
+      aria-label="loading"
+    >
       <div className={`rounded-full bg-gray-300 ${sizeConfig[size].spinner}`} />
       <div className="flex-1 space-y-2">
         <div className="h-4 bg-gray-300 rounded w-3/4" />
@@ -103,18 +136,20 @@ export default function Loader({
   // Modern Spinner - With gradient and glow
   const ModernSpinner = () => (
     <div className="relative" role="status" aria-label="loading">
-      <div 
+      <div
         className={`
           animate-spin rounded-full border-4 border-t-transparent
           bg-gradient-to-r from-indigo-500 to-purple-600
           ${sizeConfig[size].spinner}
         `}
         style={{
-          background: 'conic-gradient(from 0deg, transparent, #4f46e5, #7c3aed, transparent)',
-          WebkitMask: 'radial-gradient(farthest-side, transparent calc(100% - 4px), white 0)'
+          background:
+            "conic-gradient(from 0deg, transparent, #4f46e5, #7c3aed, transparent)",
+          WebkitMask:
+            "radial-gradient(farthest-side, transparent calc(100% - 4px), white 0)",
         }}
       />
-      <div 
+      <div
         className={`
           absolute inset-0 animate-pulse rounded-full
           bg-indigo-200 blur-sm opacity-50
@@ -145,21 +180,25 @@ export default function Loader({
 
   // Main loader container with different modes
   const LoaderContent = () => (
-    <div className={`
+    <div
+      className={`
       flex flex-col items-center justify-center 
-      ${fullScreen ? 'min-h-screen' : 'py-8'}
-      ${overlay ? 'bg-white/80 backdrop-blur-sm rounded-lg' : ''}
+      ${fullScreen ? "min-h-screen" : "py-8"}
+      ${overlay ? "bg-white/80 backdrop-blur-sm rounded-lg" : ""}
       transition-all duration-300
-    `}>
+    `}
+    >
       <div className="transform hover:scale-105 transition-transform duration-300">
         {renderLoader()}
       </div>
-      
+
       {text && (
-        <div className={`
+        <div
+          className={`
           mt-4 font-medium text-gray-600 animate-pulse
           ${sizeConfig[size].text}
-        `}>
+        `}
+        >
           {text}
         </div>
       )}
@@ -173,14 +212,16 @@ export default function Loader({
         <div className="text-center">
           {renderLoader()}
           {text && (
-            <div className={`
+            <div
+              className={`
               mt-4 font-medium text-gray-600 animate-pulse
               ${sizeConfig[size].text}
-            `}>
+            `}
+            >
               {text}
             </div>
           )}
-          
+
           {/* Optional loading tips */}
           <div className="mt-6 max-w-sm mx-auto">
             <p className="text-xs text-gray-400 animate-fade-in">
@@ -228,7 +269,7 @@ const styles = `
 `;
 
 // Add styles to document head
-if (typeof document !== 'undefined') {
+if (typeof document !== "undefined") {
   const styleSheet = document.createElement("style");
   styleSheet.innerText = styles;
   document.head.appendChild(styleSheet);

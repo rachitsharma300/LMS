@@ -1,19 +1,18 @@
-// src/pages/instructor/AddLesson.jsx
-import React, { useState } from 'react';
-import { useParams, useNavigate } from 'react-router-dom';
-import InstructorLayout from '../../layouts/InstructorLayout';
-import { instructorService } from '../../services/instructorService';
-import { toast } from 'react-toastify';
+import React, { useState } from "react";
+import { useParams, useNavigate } from "react-router-dom";
+import InstructorLayout from "../../layouts/InstructorLayout";
+import { instructorService } from "../../services/instructorService";
+import { toast } from "react-toastify";
 
 export default function AddLesson() {
   const { id } = useParams();
   const navigate = useNavigate();
   const [formData, setFormData] = useState({
-    title: '',
-    content: '',
-    mediaUrl: '',
+    title: "",
+    content: "",
+    mediaUrl: "",
     position: 1,
-    durationSeconds: 0
+    durationSeconds: 0,
   });
   const [loading, setLoading] = useState(false);
 
@@ -25,16 +24,15 @@ export default function AddLesson() {
       // Convert duration to seconds
       const lessonData = {
         ...formData,
-        durationSeconds: parseInt(formData.durationSeconds) * 60 // Convert minutes to seconds
+        durationSeconds: parseInt(formData.durationSeconds) * 60, // Convert minutes to seconds
       };
 
       await instructorService.addLesson(id, lessonData);
-      toast.success('Lesson added successfully!');
+      toast.success("Lesson added successfully!");
       navigate(`/instructor/courses/${id}`);
-      
     } catch (error) {
-      console.error('Error adding lesson:', error);
-      toast.error('Failed to add lesson. Please try again.');
+      console.error("Error adding lesson:", error);
+      toast.error("Failed to add lesson. Please try again.");
     } finally {
       setLoading(false);
     }
@@ -43,7 +41,7 @@ export default function AddLesson() {
   const handleChange = (e) => {
     setFormData({
       ...formData,
-      [e.target.name]: e.target.value
+      [e.target.name]: e.target.value,
     });
   };
 
@@ -53,9 +51,11 @@ export default function AddLesson() {
         <div className="bg-white rounded-2xl shadow-sm border border-gray-200 p-6">
           <div className="mb-6">
             <h1 className="text-2xl font-bold text-gray-900">Add New Lesson</h1>
-            <p className="text-gray-600 mt-2">Create a new lesson for your course</p>
+            <p className="text-gray-600 mt-2">
+              Create a new lesson for your course
+            </p>
           </div>
-          
+
           <form onSubmit={handleSubmit} className="space-y-6">
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-2">
@@ -142,9 +142,9 @@ export default function AddLesson() {
                 disabled={loading}
                 className="flex-1 bg-gradient-to-r from-green-500 to-emerald-600 text-white py-3 px-4 rounded-lg font-semibold hover:shadow-lg transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed"
               >
-                {loading ? 'Adding Lesson...' : 'Add Lesson'}
+                {loading ? "Adding Lesson..." : "Add Lesson"}
               </button>
-              
+
               <button
                 type="button"
                 onClick={() => navigate(`/instructor/courses/${id}`)}

@@ -1,4 +1,3 @@
-// src/pages/student/Dashboard.jsx - FIXED VERSION
 import React, { useEffect, useState } from "react";
 import apiClient from "../../services/apiClient";
 import StudentLayout from "../../layouts/StudentLayout";
@@ -14,27 +13,26 @@ export default function Dashboard() {
     const fetchDashboardData = async () => {
       try {
         setError("");
-        
-        // ✅ FIXED: Use correct API endpoints
+
+        // Use correct API endpoints
         const [statsResponse, coursesResponse] = await Promise.all([
           apiClient.get("/student/stats"),
-          apiClient.get("/student/my-courses")
+          apiClient.get("/student/my-courses"),
         ]);
 
         console.log("📊 Stats API Response:", statsResponse.data);
         console.log("📚 Courses API Response:", coursesResponse.data);
 
         setStats(statsResponse.data || {});
-        
-        // ✅ Take only first 3 courses for "recent courses"
+
+        // Take only first 3 courses for "recent courses"
         const courses = coursesResponse.data || [];
         setRecentCourses(courses.slice(0, 3));
-
       } catch (err) {
         console.error("❌ Dashboard API Error:", err);
         setError("Failed to load dashboard data");
-        
-        // ✅ Fallback empty data
+
+        // Fallback empty data
         setStats({});
         setRecentCourses([]);
       } finally {
@@ -55,9 +53,9 @@ export default function Dashboard() {
 
     const colorClasses = {
       blue: "from-blue-500 to-cyan-500",
-      green: "from-green-500 to-emerald-500", 
+      green: "from-green-500 to-emerald-500",
       purple: "from-purple-500 to-pink-500",
-      orange: "from-orange-500 to-red-500"
+      orange: "from-orange-500 to-red-500",
     };
 
     return (
@@ -84,14 +82,22 @@ export default function Dashboard() {
             className="transition-all duration-1000 ease-out"
           />
           <defs>
-            <linearGradient id={`gradient-${color}`} x1="0%" y1="0%" x2="100%" y2="100%">
+            <linearGradient
+              id={`gradient-${color}`}
+              x1="0%"
+              y1="0%"
+              x2="100%"
+              y2="100%"
+            >
               <stop offset="0%" className={`text-${color}-500`} />
               <stop offset="100%" className={`text-${color}-500`} />
             </linearGradient>
           </defs>
         </svg>
         <div className="absolute inset-0 flex items-center justify-center">
-          <span className="text-2xl font-bold text-gray-800">{percentage}%</span>
+          <span className="text-2xl font-bold text-gray-800">
+            {Math.round(percentage)}%
+          </span>
         </div>
       </div>
     );
@@ -135,7 +141,9 @@ export default function Dashboard() {
             </div>
             <div>
               <p className="text-yellow-800 font-medium">{error}</p>
-              <p className="text-yellow-700 text-sm mt-1">Showing placeholder data</p>
+              <p className="text-yellow-700 text-sm mt-1">
+                Showing placeholder data
+              </p>
             </div>
           </div>
         </div>
@@ -146,8 +154,12 @@ export default function Dashboard() {
         <div className="group bg-white/80 backdrop-blur-sm rounded-3xl shadow-lg border border-gray-200/60 p-6 hover:shadow-2xl hover:scale-105 transition-all duration-500 hover:border-blue-200">
           <div className="flex items-center justify-between">
             <div>
-              <p className="text-sm font-semibold text-gray-500 uppercase tracking-wide">Enrolled Courses</p>
-              <h3 className="text-3xl font-bold text-gray-900 mt-2">{stats.totalCourses || recentCourses.length || 0}</h3>
+              <p className="text-sm font-semibold text-gray-500 uppercase tracking-wide">
+                Enrolled Courses
+              </p>
+              <h3 className="text-3xl font-bold text-gray-900 mt-2">
+                {stats.totalCourses || recentCourses.length || 0}
+              </h3>
               <p className="text-xs text-gray-500 mt-1">Active learning</p>
             </div>
             <div className="w-14 h-14 bg-gradient-to-br from-blue-500 to-cyan-500 rounded-2xl flex items-center justify-center shadow-lg group-hover:shadow-xl transition-shadow">
@@ -159,9 +171,15 @@ export default function Dashboard() {
         <div className="group bg-white/80 backdrop-blur-sm rounded-3xl shadow-lg border border-gray-200/60 p-6 hover:shadow-2xl hover:scale-105 transition-all duration-500 hover:border-green-200">
           <div className="flex items-center justify-between">
             <div>
-              <p className="text-sm font-semibold text-gray-500 uppercase tracking-wide">Completed Lessons</p>
-              <h3 className="text-3xl font-bold text-gray-900 mt-2">{stats.completedLessons || 0}</h3>
-              <p className="text-xs text-green-600 font-medium mt-1">Keep learning!</p>
+              <p className="text-sm font-semibold text-gray-500 uppercase tracking-wide">
+                Completed Lessons
+              </p>
+              <h3 className="text-3xl font-bold text-gray-900 mt-2">
+                {stats.completedLessons || 0}
+              </h3>
+              <p className="text-xs text-green-600 font-medium mt-1">
+                Keep learning!
+              </p>
             </div>
             <div className="w-14 h-14 bg-gradient-to-br from-green-500 to-emerald-500 rounded-2xl flex items-center justify-center shadow-lg group-hover:shadow-xl transition-shadow">
               <span className="text-2xl text-white">✅</span>
@@ -171,8 +189,14 @@ export default function Dashboard() {
 
         <div className="group bg-white/80 backdrop-blur-sm rounded-3xl shadow-lg border border-gray-200/60 p-6 hover:shadow-2xl hover:scale-105 transition-all duration-500 hover:border-purple-200">
           <div className="flex flex-col items-center text-center">
-            <p className="text-sm font-semibold text-gray-500 uppercase tracking-wide mb-4">Overall Progress</p>
-            <ProgressCircle percentage={stats.progressPercentage || 0} size={80} color="purple" />
+            <p className="text-sm font-semibold text-gray-500 uppercase tracking-wide mb-4">
+              Overall Progress
+            </p>
+            <ProgressCircle
+              percentage={stats.progressPercentage || 0}
+              size={80}
+              color="purple"
+            />
             <p className="text-xs text-gray-500 mt-3">Your learning journey</p>
           </div>
         </div>
@@ -180,9 +204,15 @@ export default function Dashboard() {
         <div className="group bg-white/80 backdrop-blur-sm rounded-3xl shadow-lg border border-gray-200/60 p-6 hover:shadow-2xl hover:scale-105 transition-all duration-500 hover:border-amber-200">
           <div className="flex items-center justify-between">
             <div>
-              <p className="text-sm font-semibold text-gray-500 uppercase tracking-wide">Certificates</p>
-              <h3 className="text-3xl font-bold text-gray-900 mt-2">{stats.certificates || 0}</h3>
-              <p className="text-xs text-amber-600 font-medium mt-1">Achievements earned</p>
+              <p className="text-sm font-semibold text-gray-500 uppercase tracking-wide">
+                Certificates
+              </p>
+              <h3 className="text-3xl font-bold text-gray-900 mt-2">
+                {stats.certificates || 0}
+              </h3>
+              <p className="text-xs text-amber-600 font-medium mt-1">
+                Achievements earned
+              </p>
             </div>
             <div className="w-14 h-14 bg-gradient-to-br from-amber-500 to-orange-500 rounded-2xl flex items-center justify-center shadow-lg group-hover:shadow-xl transition-shadow">
               <span className="text-2xl text-white">🏆</span>
@@ -195,10 +225,12 @@ export default function Dashboard() {
       <div className="bg-white/80 backdrop-blur-sm rounded-3xl shadow-lg border border-gray-200/60 p-8 mb-8">
         <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between mb-8">
           <div>
-            <h2 className="text-2xl font-bold text-gray-900 mb-2">Continue Learning</h2>
+            <h2 className="text-2xl font-bold text-gray-900 mb-2">
+              Continue Learning
+            </h2>
             <p className="text-gray-600">Pick up where you left off</p>
           </div>
-          <Link 
+          <Link
             to="/student/learning"
             className="inline-flex items-center gap-2 px-6 py-3 bg-gradient-to-r from-blue-600 to-purple-600 text-white rounded-2xl hover:shadow-lg transition-all duration-300 hover:scale-105 mt-4 lg:mt-0"
           >
@@ -206,50 +238,56 @@ export default function Dashboard() {
             <span className="text-lg">→</span>
           </Link>
         </div>
-        
+
         {recentCourses.length > 0 ? (
           <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6">
             {recentCourses.map((course, index) => (
-              <div 
-                key={course.id} 
+              <div
+                key={course.id}
                 className="group bg-gradient-to-br from-white to-gray-50 rounded-2xl shadow-lg border border-gray-200/60 p-6 hover:shadow-2xl hover:scale-105 transition-all duration-500 hover:border-blue-200"
               >
                 <div className="w-full h-32 bg-gradient-to-br from-blue-500/20 to-purple-500/20 rounded-xl mb-4 flex items-center justify-center group-hover:from-blue-500/30 group-hover:to-purple-500/30 transition-all duration-500">
                   {course.coverImageUrl ? (
-                    <img 
-                      src={course.coverImageUrl} 
+                    <img
+                      src={course.coverImageUrl}
                       alt={course.title}
                       className="w-full h-full object-cover rounded-xl"
                     />
                   ) : (
-                    <span className="text-4xl opacity-70 group-hover:opacity-100 transition-opacity">📖</span>
+                    <span className="text-4xl opacity-70 group-hover:opacity-100 transition-opacity">
+                      📖
+                    </span>
                   )}
                 </div>
-                
+
                 <div className="flex items-start justify-between mb-3">
-                  <h3 className="font-bold text-gray-900 text-lg leading-tight">{course.title}</h3>
+                  <h3 className="font-bold text-gray-900 text-lg leading-tight">
+                    {course.title}
+                  </h3>
                   <span className="text-sm font-semibold bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">
                     {course.progress || 0}%
                   </span>
                 </div>
-                
+
                 <p className="text-gray-600 text-sm mb-3 line-clamp-2">
                   {course.description || "Continue your learning journey"}
                 </p>
-                
+
                 <div className="w-full bg-gray-200 rounded-full h-2 mb-4">
-                  <div 
+                  <div
                     className="bg-gradient-to-r from-blue-500 to-purple-500 h-2 rounded-full transition-all duration-1000 ease-out"
                     style={{ width: `${course.progress || 0}%` }}
                   ></div>
                 </div>
-                
+
                 <Link
                   to={`/student/course/${course.id}`}
                   className="w-full inline-flex items-center justify-center gap-2 bg-gray-900 text-white py-3 px-4 rounded-xl hover:shadow-lg transition-all duration-300 hover:scale-105 group/btn"
                 >
                   <span>Continue Learning</span>
-                  <span className="group-hover/btn:translate-x-1 transition-transform">→</span>
+                  <span className="group-hover/btn:translate-x-1 transition-transform">
+                    →
+                  </span>
                 </Link>
               </div>
             ))}
@@ -259,7 +297,9 @@ export default function Dashboard() {
             <div className="w-24 h-24 bg-gradient-to-br from-blue-100 to-purple-100 rounded-3xl flex items-center justify-center mx-auto mb-6">
               <span className="text-4xl">🎯</span>
             </div>
-            <h3 className="text-2xl font-bold text-gray-900 mb-3">Start Your Learning Journey</h3>
+            <h3 className="text-2xl font-bold text-gray-900 mb-3">
+              Start Your Learning Journey
+            </h3>
             <p className="text-gray-600 mb-8 max-w-md mx-auto">
               Enroll in your first course and begin your path to mastery
             </p>
@@ -278,22 +318,28 @@ export default function Dashboard() {
       <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
         <div className="bg-gradient-to-br from-blue-50 to-cyan-50 rounded-2xl p-6 border border-blue-200/60">
           <h3 className="font-semibold text-gray-900 mb-2">Need Help?</h3>
-          <p className="text-gray-600 text-sm mb-4">Get support for your learning journey</p>
+          <p className="text-gray-600 text-sm mb-4">
+            Get support for your learning journey
+          </p>
           <button className="text-blue-600 hover:text-blue-700 font-medium text-sm">
             Contact Support →
           </button>
         </div>
-        
+
         <div className="bg-gradient-to-br from-green-50 to-emerald-50 rounded-2xl p-6 border border-green-200/60">
-          <h3 className="font-semibold text-gray-900 mb-2">Upcoming Deadlines</h3>
+          <h3 className="font-semibold text-gray-900 mb-2">
+            Upcoming Deadlines
+          </h3>
           <p className="text-gray-600 text-sm mb-4">No pending assignments</p>
           <button className="text-green-600 hover:text-green-700 font-medium text-sm">
             View Calendar →
           </button>
         </div>
-        
+
         <div className="bg-gradient-to-br from-purple-50 to-pink-50 rounded-2xl p-6 border border-purple-200/60">
-          <h3 className="font-semibold text-gray-900 mb-2">Learning Resources</h3>
+          <h3 className="font-semibold text-gray-900 mb-2">
+            Learning Resources
+          </h3>
           <p className="text-gray-600 text-sm mb-4">Access study materials</p>
           <button className="text-purple-600 hover:text-purple-700 font-medium text-sm">
             Explore Resources →

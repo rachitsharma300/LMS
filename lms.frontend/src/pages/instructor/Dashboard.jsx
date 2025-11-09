@@ -1,4 +1,3 @@
-// src/pages/instructor/Dashboard.jsx - CLEAN PROFESSIONAL UI
 import React, { useEffect, useState } from "react";
 import InstructorLayout from "../../layouts/InstructorLayout";
 import { instructorService } from "../../services/instructorService";
@@ -30,7 +29,8 @@ export default function InstructorDashboard() {
         return;
       }
 
-      const instructorId = currentUser.id || currentUser.userId || currentUser.sub || 1;
+      const instructorId =
+        currentUser.id || currentUser.userId || currentUser.sub || 1;
       const coursesData = await instructorService.getMyCourses(instructorId);
 
       if (coursesData && Array.isArray(coursesData)) {
@@ -149,12 +149,15 @@ export default function InstructorDashboard() {
   return (
     <InstructorLayout>
       <div className="space-y-6">
-        {/* ✅ CLEAN HEADER SECTION - Admin Style */}
+        {/* Admin Style */}
         <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between">
           <div>
-            <h1 className="text-2xl lg:text-3xl font-bold text-gray-900">Instructor Dashboard</h1>
+            <h1 className="text-2xl lg:text-3xl font-bold text-gray-900">
+              Instructor Dashboard
+            </h1>
             <p className="text-gray-600 mt-2">
-              Welcome back{currentUser?.username ? `, ${currentUser.username}` : ""}!
+              Welcome back
+              {currentUser?.username ? `, ${currentUser.username}` : ""}!
               {courses.length > 0
                 ? ` You have ${courses.length} courses`
                 : " Start by creating your first course!"}
@@ -181,14 +184,18 @@ export default function InstructorDashboard() {
           </Link>
         </div>
 
-        {/* ✅ CLEAN STATS GRID - Admin Style */}
+        {/* Admin Style */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
           {/* Total Courses Card */}
           <div className="bg-white p-6 rounded-xl border border-gray-200 shadow-sm hover:shadow-md transition-shadow">
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-sm font-medium text-gray-600">Total Courses</p>
-                <p className="text-3xl font-bold text-gray-900 mt-2">{stats.totalCourses}</p>
+                <p className="text-sm font-medium text-gray-600">
+                  Total Courses
+                </p>
+                <p className="text-3xl font-bold text-gray-900 mt-2">
+                  {stats.totalCourses}
+                </p>
                 <div className="flex items-center gap-1 mt-2">
                   <span className="text-sm text-green-600">
                     {stats.publishedCourses} published
@@ -221,8 +228,12 @@ export default function InstructorDashboard() {
           <div className="bg-white p-6 rounded-xl border border-gray-200 shadow-sm hover:shadow-md transition-shadow">
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-sm font-medium text-gray-600">Total Students</p>
-                <p className="text-3xl font-bold text-gray-900 mt-2">{stats.totalStudents}</p>
+                <p className="text-sm font-medium text-gray-600">
+                  Total Students
+                </p>
+                <p className="text-3xl font-bold text-gray-900 mt-2">
+                  {stats.totalStudents}
+                </p>
                 <p className="text-sm text-gray-500 mt-2">Across all courses</p>
               </div>
               <div className="w-12 h-12 bg-green-100 rounded-xl flex items-center justify-center">
@@ -247,7 +258,9 @@ export default function InstructorDashboard() {
           <div className="bg-white p-6 rounded-xl border border-gray-200 shadow-sm hover:shadow-md transition-shadow">
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-sm font-medium text-gray-600">Average Rating</p>
+                <p className="text-sm font-medium text-gray-600">
+                  Average Rating
+                </p>
                 <div className="flex items-center gap-2 mt-2">
                   {renderRating(stats.averageRating)}
                 </div>
@@ -275,7 +288,9 @@ export default function InstructorDashboard() {
           <div className="bg-white p-6 rounded-xl border border-gray-200 shadow-sm hover:shadow-md transition-shadow">
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-sm font-medium text-gray-600">Total Earnings</p>
+                <p className="text-sm font-medium text-gray-600">
+                  Total Earnings
+                </p>
                 <p className="text-3xl font-bold text-gray-900 mt-2">
                   {formatCurrency(stats.totalEarnings)}
                 </p>
@@ -300,14 +315,17 @@ export default function InstructorDashboard() {
           </div>
         </div>
 
-        {/* ✅ CLEAN COURSES SECTION - Admin Style */}
+        {/*  Admin Style */}
         <div className="bg-white rounded-xl border border-gray-200 shadow-sm">
           <div className="p-6 border-b border-gray-200">
             <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between">
-              <h2 className="text-xl font-semibold text-gray-900">Your Courses</h2>
+              <h2 className="text-xl font-semibold text-gray-900">
+                Your Courses
+              </h2>
               <div className="flex items-center gap-4 mt-2 sm:mt-0">
                 <span className="text-sm text-gray-600">
-                  {stats.publishedCourses} Published • {stats.pendingCourses} Pending
+                  {stats.publishedCourses} Published • {stats.pendingCourses}{" "}
+                  Pending
                 </span>
               </div>
             </div>
@@ -330,7 +348,9 @@ export default function InstructorDashboard() {
                   />
                 </svg>
               </div>
-              <h3 className="text-lg font-medium text-gray-900 mb-2">No courses yet</h3>
+              <h3 className="text-lg font-medium text-gray-900 mb-2">
+                No courses yet
+              </h3>
               <p className="text-gray-600 mb-6 max-w-sm mx-auto">
                 Start creating amazing learning experiences for your students.
                 Your first course is just a click away!
@@ -368,7 +388,9 @@ export default function InstructorDashboard() {
                       <img
                         src={
                           course.coverImageUrl ||
-                          `https://via.placeholder.com/300x200/3B82F6/FFFFFF?text=${encodeURIComponent(course.title || 'Course')}`
+                          `https://via.placeholder.com/300x200/3B82F6/FFFFFF?text=${encodeURIComponent(
+                            course.title || "Course"
+                          )}`
                         }
                         alt={course.title}
                         className="w-full h-full object-cover"
