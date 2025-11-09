@@ -1,111 +1,118 @@
-<h1>🎓 Learning Management System (LMS) Backend</h1>
-<p>
-A full-featured Learning Management System built with Spring Boot that facilitates online learning with role-based access control, course management, and student progress tracking.
-</p>
+# 🎓 Learning Management System (LMS) Backend
 
-<h2>🚀 Features</h2>
-<h3>👥 Role-Based Access Control</h3>
+A full-featured **Learning Management System** built with **Spring Boot** that supports:
+- Role-based access control
+- Course & lesson management
+- Secure authentication and authorization
+- Student progress tracking
+- Cloud-based media storage
 
--> Admin: Manage users, approve courses, system oversight
+---
 
--> Instructor: Create courses, manage lessons, view enrollments
+## 🚀 Features
 
--> Student: Browse courses, enroll, track learning progress.
+### 👥 Role-Based Access Control
+| Role | Capabilities |
+|------|--------------|
+| **Admin** | Manage users • Approve courses • System oversight |
+| **Instructor** | Create/manage courses • Manage lessons • View enrollments |
+| **Student** | Browse courses • Enroll • Track learning progress |
 
-<h3>📚 Course Management</h3>
--> Create and manage courses with rich content
+---
 
--> Add lessons with text, video, PDF support
+### 📚 Course Management
+- Create and manage courses with structured content
+- Add lessons (Text, Video, PDF supported)
+- Categorized courses with approval workflow
+- Enrollment management with duplicate prevention
 
--> Course categorization and approval workflow
+---
 
--> Enrollment management with duplicate prevention
+### 🔐 Security & Authentication
+- JWT-based secure authentication
+- Password hashing using **BCrypt**
+- Role-based API access restrictions
+- CORS enabled for frontend integration
 
-<h3>🔐 Security & Authentication</h3>
--> JWT-based secure authentication
+---
 
--> Password encryption with BCrypt
+### 📁 Media Handling
+- AWS S3 cloud storage integration
+- Supports Videos • PDFs • Images • Audio
+- Secure upload & access endpoints
 
--> Role-based endpoint protection
+---
 
--> CORS configuration for frontend integration
+## 🛠 Tech Stack
 
-<h3>📁 Media Handling</h3>
--> AWS S3 integration for file storage
+### 🧩 Backend
+| Component | Technology |
+|----------|------------|
+| Framework | **Spring Boot 3.5.6** |
+| Security | **Spring Security 6.5.5 + JWT** |
+| Database | **MySQL + Spring Data JPA** |
+| API Docs | **Swagger / OpenAPI 3.1** |
+| Testing | **JUnit 5, Mockito** |
+| Build Tool | **Maven** |
 
--> Support for videos, PDFs, images, audio
+### ☁️ Cloud Services
+| Service | Provider |
+|--------|----------|
+| File Storage | **AWS S3** |
+| Deployment | **Render / Railway (Backend)** <br> **Vercel / Netlify (Frontend)** |
 
--> Secure file upload and retrieval
+---
 
-<h2>🛠 Tech Stack</h2>
-<h3>Backend</h3>
--> Framework: Spring Boot 3.5.6
+## 📋 API Endpoints
 
--> Security: Spring Security 6.5.5 + JWT
+### 🔑 Authentication Endpoints
+| Method | Endpoint | Description | Access |
+|-------|----------|-------------|--------|
+| POST | `/api/auth/signup` | User Registration | Public |
+| POST | `/api/auth/login` | Login & Token Issuance | Public |
+| POST | `/api/auth/validate` | Validate JWT Token | All Roles |
 
--> Database: MySQL with Spring Data JPA
+---
 
--> Documentation: Swagger/OpenAPI 3.1
+### 🛡 Admin Endpoints
+| Method | Endpoint | Description |
+|-------|----------|-------------|
+| GET | `/api/admin/users` | Get all users |
+| PUT | `/api/admin/users/{id}/role` | Update user role |
+| GET | `/api/admin/courses` | Get all courses |
+| PUT | `/api/admin/courses/{id}/approve` | Approve/Reject a course |
+| DELETE | `/api/admin/courses/{id}` | Delete a course |
 
--> Testing: JUnit 5, Mockito
+---
 
--> Build Tool: Maven
+### 🎓 Instructor Endpoints
+| Method | Endpoint | Description |
+|-------|----------|-------------|
+| POST | `/api/instructor/courses` | Create new course |
+| PUT | `/api/instructor/courses/{id}` | Update existing course |
+| GET | `/api/instructor/courses` | View instructor’s courses |
+| POST | `/api/instructor/courses/{courseId}/lessons` | Add lesson to course |
+| GET | `/api/instructor/courses/{courseId}/enrollments` | View enrolled students |
 
-<h3>Cloud Services</h3>
--> File Storage: AWS S3
+---
 
--> Deployment: Render/Railway (Backend), Vercel/Netlify (Frontend)
+### 🧑‍🎓 Student Endpoints
+| Method | Endpoint | Description |
+|-------|----------|-------------|
+| GET | `/api/student/courses` | Browse available courses |
+| POST | `/api/student/courses/{courseId}/enroll` | Enroll in course |
+| GET | `/api/student/enrollments` | View enrolled courses |
+| GET | `/api/student/courses/{courseId}/lessons` | Access course lessons |
+| PUT | `/api/student/progress/{lessonId}` | Update lesson progress |
 
-<h2>📋 API Endpoints</h2>
+---
 
-Authentication Endpoints
-```
-Method	Endpoint	Description	Access
-POST	/api/auth/signup	User registration	Public
-POST	/api/auth/login	User login	Public
-POST	/api/auth/validate	Token validation	All Roles
-```
-Admin Endpoints
-```
+### 🎥 Media Endpoints
+| Method | Endpoint | Description |
+|-------|----------|-------------|
+| POST | `/api/media/upload` | Upload media to AWS |
+| GET | `/api/media/{filename}` | Retrieve media file |
+| DELETE | `/api/media/{filename}` | Delete media file |
 
-Method	Endpoint	Description
-GET	/api/admin/users	Get all users
-PUT	/api/admin/users/{id}/role	Update user role
-GET	/api/admin/courses	Get all courses
-PUT	/api/admin/courses/{id}/approve	Approve/reject course
-DELETE	/api/admin/courses/{id}	Delete course
-```
-Instructor Endpoints
-```
-
-Method	Endpoint	Description
-POST	/api/instructor/courses	Create new course
-PUT	/api/instructor/courses/{id}	Update course
-GET	/api/instructor/courses	Get instructor's courses
-POST	/api/instructor/courses/{courseId}/lessons	Add lesson to course
-GET	/api/instructor/courses/{courseId}/enrollments	View course enrollments
-```
-Student Endpoints
-```
-
-Method	Endpoint	Description
-GET	/api/student/courses	Browse available courses
-POST	/api/student/courses/{courseId}/enroll	Enroll in course
-GET	/api/student/enrollments	Get student's enrollments
-GET	/api/student/courses/{courseId}/lessons	View course lessons
-PUT	/api/student/progress/{lessonId}	Update lesson progress
-```
-Media Endpoints
-```
-
-Method	Endpoint	Description
-POST	/api/media/upload	Upload media file
-GET	/api/media/{filename}	Get media file
-DELETE	/api/media/{filename}	Delete media file
-```
-
-
-
-
-
+---
 
