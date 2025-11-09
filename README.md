@@ -309,4 +309,27 @@ AWS_S3_BUCKET=your_bucket_name
 | **Instructor**| instructor@lms.com            | instructor123    |
 | **Student**   | student@lms.com               | student123       |
 
+## Configuration Example
+```
+# Server
+server.port=8080
+
+# Database
+spring.jpa.hibernate.ddl-auto=update
+spring.jpa.show-sql=true
+
+# JWT
+jwt.secret=your-secret-key
+jwt.expiration=86400000
+
+# AWS S3
+aws.s3.bucket-name=your-bucket
+aws.region=us-east-1
+```
+
+
+## Author
+- Rachit Sharma
+- GitHub: @rachitsharam300
+
 
