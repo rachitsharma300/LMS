@@ -5,35 +5,35 @@ import useAuth from "../../hooks/useAuth";
 
 /**
  * 🔐 Enhanced PrivateRoute Component
- * 
+ *
  * Features:
  * ✅ Role-based access control
  * ✅ Smooth redirects with state preservation
  * ✅ Loading states during auth check
  * ✅ Custom unauthorized page
  * ✅ Route history preservation
- * 
+ *
  * Usage Examples:
- * 
+ *
  * // Basic authentication only
  * <Route element={<PrivateRoute />}>
  *   <Route path="/dashboard" element={<Dashboard />} />
  * </Route>
- * 
+ *
  * // Specific roles only
  * <Route element={<PrivateRoute allowedRoles={['ADMIN']} />}>
  *   <Route path="/admin" element={<AdminPanel />} />
  * </Route>
- * 
+ *
  * // Multiple roles allowed
  * <Route element={<PrivateRoute allowedRoles={['ADMIN', 'INSTRUCTOR']} />}>
  *   <Route path="/manage" element={<Management />} />
  * </Route>
  */
-export default function PrivateRoute({ 
-  allowedRoles = [], 
+export default function PrivateRoute({
+  allowedRoles = [],
   redirectTo = "/login",
-  unauthorizedRedirectTo = "/unauthorized"
+  unauthorizedRedirectTo = "/unauthorized",
 }) {
   const { user, isLoading } = useAuth();
   const location = useLocation();
@@ -44,8 +44,12 @@ export default function PrivateRoute({
       <div className="min-h-screen flex items-center justify-center bg-gray-50">
         <div className="text-center">
           <div className="w-16 h-16 border-4 border-indigo-500 border-t-transparent rounded-full animate-spin mx-auto mb-4"></div>
-          <p className="text-gray-600 font-medium">Checking access permissions...</p>
-          <p className="text-sm text-gray-500 mt-2">Please wait while we verify your credentials</p>
+          <p className="text-gray-600 font-medium">
+            Checking access permissions...
+          </p>
+          <p className="text-sm text-gray-500 mt-2">
+            Please wait while we verify your credentials
+          </p>
         </div>
       </div>
     );
@@ -55,13 +59,13 @@ export default function PrivateRoute({
   if (!user) {
     // Preserve the attempted URL for redirect after login
     return (
-      <Navigate 
-        to={redirectTo} 
-        replace 
-        state={{ 
+      <Navigate
+        to={redirectTo}
+        replace
+        state={{
           from: location,
-          message: "Please sign in to access this page"
-        }} 
+          message: "Please sign in to access this page",
+        }}
       />
     );
   }
@@ -69,20 +73,22 @@ export default function PrivateRoute({
   // Check role-based access if specific roles are required
   if (allowedRoles.length > 0) {
     const userRoles = Array.isArray(user.roles) ? user.roles : [user.roles];
-    const hasRequiredRole = userRoles.some(role => allowedRoles.includes(role));
-    
+    const hasRequiredRole = userRoles.some((role) =>
+      allowedRoles.includes(role)
+    );
+
     if (!hasRequiredRole) {
       // User doesn't have required role, show unauthorized page
       return (
-        <Navigate 
-          to={unauthorizedRedirectTo} 
-          replace 
-          state={{ 
+        <Navigate
+          to={unauthorizedRedirectTo}
+          replace
+          state={{
             from: location,
             requiredRoles: allowedRoles,
             userRoles: userRoles,
-            message: "You don't have permission to access this page"
-          }} 
+            message: "You don't have permission to access this page",
+          }}
         />
       );
     }
@@ -95,22 +101,22 @@ export default function PrivateRoute({
 
 /**
  * 🎯 Usage with React Router v6:
- * 
+ *
  * // In your router configuration:
  * import PrivateRoute from './components/common/PrivateRoute';
- * 
+ *
  * <Routes>
  *   {/* Public routes *\/}
  *   <Route path="/" element={<Home />} />
  *   <Route path="/login" element={<Login />} />
  *   <Route path="/signup" element={<Signup />} />
- *   
+ *
  *   {/* Protected routes - authentication required *\/}
  *   <Route element={<PrivateRoute />}>
  *     <Route path="/dashboard" element={<Dashboard />} />
  *     <Route path="/profile" element={<Profile />} />
  *   </Route>
- *   
+ *
  *   {/* Admin only routes *\/}
  *   <Route element={<PrivateRoute allowedRoles={['ADMIN']} />}>
  *     <Route path="/admin" element={<AdminLayout />}>
@@ -118,7 +124,7 @@ export default function PrivateRoute({
  *       <Route path="analytics" element={<Analytics />} />
  *     </Route>
  *   </Route>
- *   
+ *
  *   {/* Instructor routes *\/}
  *   <Route element={<PrivateRoute allowedRoles={['INSTRUCTOR', 'ADMIN']} />}>
  *     <Route path="/instructor" element={<InstructorLayout />}>
@@ -126,7 +132,7 @@ export default function PrivateRoute({
  *       <Route path="students" element={<StudentList />} />
  *     </Route>
  *   </Route>
- *   
+ *
  *   {/* Student routes *\/}
  *   <Route element={<PrivateRoute allowedRoles={['STUDENT']} />}>
  *     <Route path="/learn" element={<LearningLayout />}>
@@ -134,7 +140,7 @@ export default function PrivateRoute({
  *       <Route path="progress" element={<Progress />} />
  *     </Route>
  *   </Route>
- *   
+ *
  *   {/* 404 page *\/}
  *   <Route path="*" element={<NotFound />} />
  * </Routes>
@@ -142,15 +148,15 @@ export default function PrivateRoute({
 
 /**
  * 🔧 Optional: Create an Unauthorized page component
- * 
+ *
  * // src/pages/Unauthorized.jsx
  * import React from "react";
  * import { useLocation, Link } from "react-router-dom";
- * 
+ *
  * export default function Unauthorized() {
  *   const location = useLocation();
  *   const { requiredRoles = [], userRoles = [] } = location.state || {};
- * 
+ *
  *   return (
  *     <div className="min-h-screen flex items-center justify-center bg-gray-50">
  *       <div className="max-w-md w-full text-center">
