@@ -11,8 +11,10 @@ RUN ./mvnw dependency:go-offline
 
 COPY src ./src
 
-RUN ./mvnw package -DskipTests
+# Build jar
+RUN ./mvnw clean package spring-boot:repackage -DskipTests
 
 EXPOSE 8080
 
-ENTRYPOINT ["sh", "-c", "java -jar target/*.jar"]
+# run any jar inside target
+ENTRYPOINT ["sh", "-c", "java -jar $(ls target/*.jar)"]
