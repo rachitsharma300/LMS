@@ -1,74 +1,13 @@
-lms.frontend/
-```
-├── node_modules/
-├── public/
-├── src/
-│ ├── assets/
-│ │ └── react.svg
-│ │
-│ ├── components/
-│ │ ├── CourseCard.jsx
-│ │ ├── Footer.jsx
-│ │ ├── Loader.jsx
-│ │ ├── Navbar.jsx
-│ │ └── PrivateRoute.jsx
-│ │
-│ ├── context/
-│ │ └── AuthContext.jsx
-│ │
-│ ├── hooks/
-│ │ └── useAuth.js
-│ │
-│ ├── layouts/
-│ │ ├── AdminLayout.jsx
-│ │ ├── InstructorLayout.jsx
-│ │ └── StudentLayout.jsx
-│ │
-│ ├── pages/
-│ │ ├── admin/
-│ │ │ ├── CourseApproval.jsx
-│ │ │ ├── Dashboard.jsx
-│ │ │ └── UserManagement.jsx
-│ │ │
-│ │ ├── auth/
-│ │ │ ├── Login.jsx
-│ │ │ └── Signup.jsx
-│ │ │
-│ │ ├── instructor/
-│ │ │ ├── AddLesson.jsx
-│ │ │ ├── CourseDetail.jsx
-│ │ │ ├── CreateCourse.jsx
-│ │ │ ├── Dashboard.jsx
-│ │ │ ├── EnrolledStudents.jsx
-│ │ │ └── MediaUpload.jsx
-│ │ │
-│ │ └── student/
-│ │ ├── CourseViewer.jsx
-│ │ ├── Dashboard.jsx
-│ │ └── Home.jsx
-│ │
-│ ├── routes/
-│ │ └── AppRoutes.jsx
-│ │
-│ ├── services/
-│ │ ├── adminService.js
-│ │ ├── apiClient.js
-│ │ ├── authService.js
-│ │ ├── courseService.js
-│ │ ├── instructorService.js
-│ │ ├── lessonService.js
-│ │ └── userService.js
-│ │
-│ ├── styles/
-│ │ ├── globals.css
-│ │ └── tailwind.css
-│ │
-│ ├── App.css
-│ ├── App.jsx
-│ ├── index.css
-│ ├── main.jsx
-│ └── NotFound.jsx
-│
-└── package.json
+<h1>🎓 Learning Management System (LMS) Backend</h1>
+<p>
+A full-featured Learning Management System built with Spring Boot that facilitates online learning with role-based access control, course management, and student progress tracking.
+</p>
 
-```
+<h2>🚀 Features</h2>
+<h3>👥 Role-Based Access Control</h3>
+
+Admin: Manage users, approve courses, system oversight
+
+Instructor: Create courses, manage lessons, view enrollments
+
+Student: Browse courses, enroll, track learning progress
