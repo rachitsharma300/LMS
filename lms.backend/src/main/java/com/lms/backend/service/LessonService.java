@@ -27,4 +27,8 @@ public interface LessonService {
 
      // Lesson delete
     void deleteLesson(Long id);
+
+    // Media URL update method
+    Lesson updateLessonMediaUrl(Long lessonId, String mediaUrl);
+
 }

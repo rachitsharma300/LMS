@@ -56,4 +56,14 @@ public class LessonServiceImpl implements LessonService {
         Lesson lesson = getLessonById(id);
         lessonRepository.delete(lesson);
     }
+
+    // ✅ NEW METHOD IMPLEMENTATION
+    @Override
+    public Lesson updateLessonMediaUrl(Long lessonId, String mediaUrl) {
+        Lesson lesson = lessonRepository.findById(lessonId)
+                .orElseThrow(() -> new RuntimeException("Lesson not found with id: " + lessonId));
+
+        lesson.setMediaUrl(mediaUrl);
+        return lessonRepository.save(lesson);
+    }
 }

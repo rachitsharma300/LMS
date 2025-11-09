@@ -14,4 +14,5 @@ public interface LessonRepository extends JpaRepository<Lesson, Long> {
     Optional<Lesson> findByIdAndCourse(Long id, Course course);
     List<Lesson> findByCourse(Course course);
     long countByCourse(Course course);
+    List<Lesson> findByCourseId(Long courseId);
 }
