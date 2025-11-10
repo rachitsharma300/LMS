@@ -1,6 +1,6 @@
 # 🎓 Learning Management System (LMS) Backend
 
-[Watch Video]([https://drive.google.com/file/d/YOUR_FILE_ID/view?usp=sharing](https://drive.google.com/file/d/1GTMQK1IE6Ck5ITKqIHvDme-4BKQMYZ-2/view?usp=drive_link))
+[Watch Video](https://drive.google.com/file/d/1GTMQK1IE6Ck5ITKqIHvDme-4BKQMYZ-2/view?usp=drive_link)
 
 A full-featured **Learning Management System** built with **Spring Boot** that supports:
 - Role-based access control
