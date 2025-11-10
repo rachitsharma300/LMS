@@ -2,6 +2,9 @@
 
 [Watch Video](https://drive.google.com/file/d/1GTMQK1IE6Ck5ITKqIHvDme-4BKQMYZ-2/view?usp=drive_link)
 
+
+![LMS GIf](https://github.com/user-attachments/assets/b996f8aa-6cd4-48e7-8e78-62a210f4e7b9)
+
 A full-featured **Learning Management System** built with **Spring Boot** that supports:
 - Role-based access control
 - Course & lesson management
