@@ -2,13 +2,17 @@
 
 [Watch Full Video 👆🏼](https://drive.google.com/file/d/1GTMQK1IE6Ck5ITKqIHvDme-4BKQMYZ-2/view?usp=drive_link)
 
-![LMS_Gif](https://github.com/user-attachments/assets/6b664c1f-1af7-4f79-a65b-67a2c1578a26)
-
-
-
-
-
 https://github.com/user-attachments/assets/bac52b6a-f5e0-4686-aecb-fdd7356a6567
+
+
+<!---
+![LMS_Gif](https://github.com/user-attachments/assets/6b664c1f-1af7-4f79-a65b-67a2c1578a26)
+--->
+
+
+
+
+
 
 
 A full-featured **Learning Management System** built with **Spring Boot** that supports:
