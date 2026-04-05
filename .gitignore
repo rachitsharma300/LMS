@@ -132,3 +132,5 @@ jspm_packages/
 
 # Logs
 **/*.log
+
+*.class
