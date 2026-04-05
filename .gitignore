@@ -121,6 +121,7 @@ jspm_packages/
 # IDE
 **/.project
 **/.classpath
+**/.class
 **/.settings/
 **/*.springBeans
 
