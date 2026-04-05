@@ -12,7 +12,8 @@ export default function StudentLessonView() {
     const fetchLesson = async () => {
       try {
         const response = await fetch(
-          `http://localhost:8080/api/lessons/${lessonId}`,
+          `${"https://lms-80z3.onrender.com/api"}/lessons/${lessonId}`,
+
           {
             headers: {
               Authorization: `Bearer ${localStorage.getItem("token")}`,

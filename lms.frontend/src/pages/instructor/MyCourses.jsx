@@ -16,7 +16,7 @@ export default function MyCourses() {
   const loadCourses = async () => {
     try {
       const currentUser = getCurrentUser();
-      const instructorId = currentUser.id || currentUser.userId || 1;
+      const instructorId = currentUser.id || currentUser.userId || 2;
       const coursesData = await instructorService.getMyCourses(instructorId);
       setCourses(coursesData || []);
     } catch (error) {

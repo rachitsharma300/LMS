@@ -19,7 +19,7 @@ export default function MediaUpload() {
     const fetchLessons = async () => {
       try {
         const response = await fetch(
-          `http://localhost:8080/api/lessons/course/${id}`,
+          `https://lms-80z3.onrender.com/api/lessons/course/${id}`,
           {
             headers: {
               Authorization: `Bearer ${localStorage.getItem("token")}`,
@@ -105,7 +105,7 @@ export default function MediaUpload() {
       formData.append("lessonId", selectedLessonId); // ✅ Lesson ID add karein
 
       // Real API call
-      const response = await fetch("http://localhost:8080/api/media/upload", {
+      const response = await fetch("https://lms-80z3.onrender.com/api/media/upload", {
         method: "POST",
         body: formData,
         headers: {

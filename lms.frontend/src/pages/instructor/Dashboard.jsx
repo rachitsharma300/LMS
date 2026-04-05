@@ -30,7 +30,7 @@ export default function InstructorDashboard() {
       }
 
       const instructorId =
-        currentUser.id || currentUser.userId || currentUser.sub || 1;
+        currentUser.id || currentUser.userId || currentUser.sub || 2;
       const coursesData = await instructorService.getMyCourses(instructorId);
 
       if (coursesData && Array.isArray(coursesData)) {
