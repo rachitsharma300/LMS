@@ -1,7 +1,7 @@
 import axios from "axios";
 
 const apiClient = axios.create({
-  baseURL: "http://localhost:8080/api",
+  baseURL: "https://lms-80z3.onrender.com/api",
   headers: {
     "Content-Type": "application/json",
   },
