@@ -20,7 +20,6 @@ import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/api/instructor")
-@CrossOrigin(origins = "*")
 public class InstructorController {
 
     @Autowired
