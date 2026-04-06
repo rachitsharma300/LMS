@@ -13,7 +13,6 @@ import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/api/lessons")
-@CrossOrigin(origins = "*")
 public class LessonController {
 
     @Autowired
